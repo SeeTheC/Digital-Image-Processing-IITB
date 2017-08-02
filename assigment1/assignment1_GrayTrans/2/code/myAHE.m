@@ -21,7 +21,7 @@ function intensity=getIntesity(img,coordinate,windowSize)
     [m,n]=size(img);
     x=coordinate(1);y=coordinate(2);
     
-    N=windowSize-2;% for odd
+    N=floor((windowSize-1)/2);
     if(N<0)
         N=0;
     end

@@ -15,9 +15,10 @@ axis tight,axis on;
 figure('name','Shrink Image by 2');
 outImg=myShrinkImageByFactorD(img,2);
 imshow(outImg,cmGray256),daspect([1,1,1]);
-colorbar();
+%%colorbar();
 axis tight,axis on;
 
+%% Shrink Image By factor: 3
 shrinkFig=figure('name','Shrink Image by 3');
 outImg=myShrinkImageByFactorD(img,3);
 imshow(outImg,cmGray256),daspect([1,1,1]);

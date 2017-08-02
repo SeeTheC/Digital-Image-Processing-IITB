@@ -70,7 +70,7 @@ tic
 img=imgBarbara;
 figure('name','Original Image: Barbara');
 imshow(img,cmGray),daspect([1,1,1]);
-out=myAHE1(img,201);
+out=myAHE1(img,251);
 figure('name','Histogram Eq: Barbara'),imhist(uint8(out));
 figure('name','Histogram Eq: Barbara');
 imshow(out,cmGray),daspect([1,1,1]);
@@ -82,8 +82,8 @@ img=imgTem;
 figure('name','Original Image: Tem');
 imshow(img,cmGray),daspect([1,1,1]);
 out=myAHE1(img,121);
-figure('name','Histogram Eq: Tem'),imhist(uint8(out));
-figure('name','Histogram Eq: Tem');
+figure('name','AHE: Tem'),imhist(uint8(out));
+figure('name','AHE: Tem');
 imshow(out,cmGray),daspect([1,1,1]);
 %tocBytes(gcp);
 toc
@@ -93,12 +93,35 @@ tic
 img=imgCanyon;
 figure('name','Original Image: Canyon');
 imshow(img,cmGray),daspect([1,1,1]);
-out=myAHE1(img,255);
-figure('name','Histogram Eq: Canyon');
+out=myAHE1(img,161);
+figure('name','AHE Eq: Canyon:Red'),imhist(uint8(out(:,:,1)));
+figure('name','AHE Eq: Canyon:Green'),imhist(uint8(out(:,:,2)));
+figure('name','AHE Eq: Canyon:blue'),imhist(uint8(out(:,:,3)));
+figure('name','AHE Eq: Canyon');
 imshow(uint8(out),cmGray),daspect([1,1,1]);
 toc
 %%
+%%
+%% CLAHE : Barbara
+tic
 img=imgBarbara;
-img1=adapthisteq(uint8(img));
-imshow(img1)
-toc;
+figure('name','Original Image: Barbara');
+imshow(img,cmGray),daspect([1,1,1]);
+out=myCLAHE(img,201,0.01);
+figure('name','Histogram Eq: Barbara'),imhist(uint8(out));
+figure('name','Histogram Eq: Barbara');
+imshow(out,cmGray),daspect([1,1,1]);
+toc
+
+%% AHE : Canyon
+tic
+img=imgCanyon;
+figure('name','Original Image: Canyon');
+imshow(img,cmGray),daspect([1,1,1]);
+out=myCLAHE(img,101,0.005);
+figure('name','AHE Eq: Canyon:Red'),imhist(uint8(out(:,:,1)));
+figure('name','AHE Eq: Canyon:Green'),imhist(uint8(out(:,:,2)));
+figure('name','AHE Eq: Canyon:blue'),imhist(uint8(out(:,:,3)));
+figure('name','AHE Eq: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+toc

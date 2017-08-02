@@ -1,7 +1,7 @@
 % Test a=[1,2,3,4,5;6,7,8,9,10;11,12,13,14,15;16,17,18,19,20;21,22,23,24,25]
 % NxN = 3x3
 % Run; myAHE1(uint8(a),3)
-function outImg = myAHE1(img,windowSize)
+function outImg = myCLAHE(img,windowSize,hThershold)
 % Adaptive Histogram Equalization: AHE
     [m,n,k]=size(img);
     z=zeros(m,n,k);  
@@ -12,7 +12,7 @@ function outImg = myAHE1(img,windowSize)
         for row=1:2:m        
             % Scan: Left -> Right
             for col=1:1:n
-                [val,maskCoordinate,histogram]=getIntesity(layerImg,[row,col],windowSize,maskCoordinate,histogram);   
+                [val,maskCoordinate,histogram]=getIntesity(layerImg,[row,col],windowSize,maskCoordinate,histogram,hThershold);   
                 z(row,col,layer)=val;    
             end
 
@@ -24,7 +24,7 @@ function outImg = myAHE1(img,windowSize)
             %disp('<<<----------- Reverse-----');
             % Scan: Right -> Left
             for col=n:-1:1
-                   [val,maskCoordinate,histogram]=getIntesity(layerImg,[row+1,col],windowSize,maskCoordinate,histogram);     
+                   [val,maskCoordinate,histogram]=getIntesity(layerImg,[row+1,col],windowSize,maskCoordinate,histogram,hThershold);     
                    z(row+1,col,layer)=val;     
             end
         end
@@ -37,11 +37,11 @@ end
 % Note: In NxN, N is always ODD. like 3,5,7,
 % At at border the portion of window is trimmed which is going out of
 % image.
-function [newVal,maskCoordinate,newHistogram]=getIntesity(img,coordinate,windowSize,oldMaskCoordinate,histogram)    
+function [newVal,maskCoordinate,newHistogram]=getIntesity(img,coordinate,windowSize,oldMaskCoordinate,histogram,hThershold)    
     [m,n]=size(img);
     x=coordinate(1);y=coordinate(2);
     
-   N=floor((windowSize-1)/2);
+    N=floor((windowSize-1)/2);
     if(N<0)
         N=0;
     end
@@ -150,12 +150,34 @@ function [newVal,maskCoordinate,newHistogram]=getIntesity(img,coordinate,windowS
     
     
     totalPixel= (x2-x1+1)*(y2-y1+1);
+    thershlodFreq=floor(hThershold*totalPixel);
+    copyHist=histogram;
+    
+    numberOfIntensity=sum(copyHist>0);
+    exceedingIntensity=copyHist(copyHist>thershlodFreq);
+    countExceedingFreq=sum(exceedingIntensity)-(thershlodFreq*length(exceedingIntensity));
+    perIntensityDistribution=floor(countExceedingFreq/numberOfIntensity);
+    %disp(max(copyHist))
+    if( ~isempty(exceedingIntensity) && perIntensityDistribution>0)   
+        fprintf('pInte=%d\n',perIntensityDistribution);
+        for i=1:1:256
+            % Redistribute the exceeded frequency 
+            if(copyHist(i) ~= 0)
+                if(copyHist(i) <= thershlodFreq)
+                    copyHist(i)=copyHist(i)+perIntensityDistribution;
+                elseif(copyHist(i) > thershlodFreq)
+                    copyHist(i)=copyHist(i)-thershlodFreq+perIntensityDistribution;
+                end
+
+            end
+        end
+    end
     val=img(x,y);        
-    z=val; 
+    z=val;     
     % Calculating  cumulative distribution of each intensity
     cDist=0;
     for i=1:1:256
-        ithProb=histogram(i)/totalPixel;
+        ithProb=copyHist(i)/totalPixel;
         cDist=ithProb+cDist;
         if(i==val+1)
             z=cDist*255;
