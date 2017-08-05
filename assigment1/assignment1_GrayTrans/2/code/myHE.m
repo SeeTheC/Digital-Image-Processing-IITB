@@ -27,7 +27,7 @@ end
 
 function intensities = getEqualizeHistogram(img )
     L=256;
-    [m,n,k]=size(img)    
+    [m,n,k]=size(img);    
     [count,binlocation]=imhist(img);
     totalPixel=m*n;
     cumulativeDistribution=zeros(1,L);

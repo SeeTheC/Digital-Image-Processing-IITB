@@ -97,7 +97,7 @@ colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 
 toc;
-</pre><pre class="codeoutput">Elapsed time is 1.219452 seconds.
+</pre><pre class="codeoutput">Elapsed time is 1.250944 seconds.
 </pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>Bilinear Interpolation<a name="4"></a></h2><p>The key idea is to perform linear interpolation first in one direction, and then again in the other direction. Although each step is linear in the sampled values and in the position, the interpolation as a whole is not linear but rather quadratic in the sample location.</p><p><img vspace="5" hspace="5" src="binary1.png" alt=""> </p><p><img vspace="5" hspace="5" src="binary2.png" alt=""> </p><h2>Alogrithm for Bilinear Interpolation<a name="8"></a></h2><p>For finding value of f(x,y) we have used matrix equation as it gives solution in less steps.It is assumed that we know the value of f at the four points Q11 = (x1, y1), Q12 = (x1, y2), Q21 = (x2, y1), and Q22 = (x2, y2).</p><p><img vspace="5" hspace="5" src="binary3.png" alt=""> </p><p><img vspace="5" hspace="5" src="binary4.png" alt=""> </p><p>Input : As an input image is given Output: As output enlarged image is obtained</p><pre class="codeinput">tic
 
 file=<span class="string">'../data/barbaraSmall.png'</span>;
@@ -247,6 +247,7 @@ title('\fontsize{10}{\color{magenta}Enlarge: Nearnest Neighbour Interpolation}')
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
+
 
 ##### SOURCE END #####
 --></body></html>
