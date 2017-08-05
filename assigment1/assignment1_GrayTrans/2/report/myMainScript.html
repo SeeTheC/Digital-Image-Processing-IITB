@@ -1,0 +1,776 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment 1 -- Question 2</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-06"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Assignment 1 -- Question 2</h1><!--introduction--><p>CS-663 Group-163059009,16305R011,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Linear Contrast</a></li><li><a href="#4">Linear Contrast: Temp</a></li><li><a href="#5">Linear Contrast: Canyon</a></li><li><a href="#6">Histogram Eq</a></li><li><a href="#7">Histogram Eq: Barbara</a></li><li><a href="#8">Histogram Eq: Tem</a></li><li><a href="#9">Histogram Eq: Canyon</a></li><li><a href="#10">Adaptive Histogram Equalization</a></li><li><a href="#11">Logic of AHE used</a></li><li><a href="#12">Observations made in AHE</a></li><li><a href="#16">AHE : Barbara</a></li><li><a href="#17">AHE : TEM</a></li><li><a href="#18">AHE : Canyon</a></li><li><a href="#19">CLAHE</a></li><li><a href="#20">Logic for thersholding in CLAHE</a></li><li><a href="#21">Observation made in CLAHE</a></li><li><a href="#22">CLAHE : Barbara</a></li><li><a href="#23">CLAHE : Tem</a></li><li><a href="#24">CLAHE : Canyon</a></li></ul></div><pre class="codeinput">fileBarbara=<span class="string">'../data/barbara.png'</span>;
+fileTem=<span class="string">'../data/TEM.png'</span>;
+fileCanyon=<span class="string">'../data/canyon.png'</span>;
+imgBarbara=imread(fileBarbara);
+imgTem=imread(fileTem);
+imgCanyon=imread(fileCanyon);
+</pre><h2>Linear Contrast<a name="2"></a></h2><p>Contrast stretching (often called normalization) is a simple image enhancement technique that attempts to improve the contrast in an image by `stretching' the range of intensity values it contains to span a desired range of values.</p><pre class="codeinput">tic
+img=imgBarbara;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Barbara'</span>);
+cmGray=colormap(gray(256));
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Barbara}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+[out,intensities]=myLinearContrastStretching(img,[90,60],[180,230]);
+figure(<span class="string">'name'</span>,<span class="string">'Contrast Image: Barbara'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Contrast Image: Barbara}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+figure(<span class="string">'name'</span>,<span class="string">'Contrast Plot: Barbara'</span>),plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Contrast Plot}'</span>);
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 6.642232 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>Linear Contrast: Temp<a name="4"></a></h2><pre class="codeinput">tic
+img=imgTem;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: TEM'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: TEM}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+[out,intensities]=myLinearContrastStretching(img,[130,30],[180,220]);
+figure(<span class="string">'name'</span>,<span class="string">'Contrast Image: TEM'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Contrast Image: TEM}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+figure(<span class="string">'name'</span>,<span class="string">'Contrast Plot: Tem'</span>);plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Contrast Plot}'</span>);
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 4.833524 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <h2>Linear Contrast: Canyon<a name="5"></a></h2><pre class="codeinput">tic
+img=imgCanyon;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Canyon'</span>);
+imshow(img),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Canyon}'</span>);
+pause(1);
+
+[out,intensities]=myLinearContrastStretching(img,[40,20],[160,200]);
+figure(<span class="string">'name'</span>,<span class="string">'Contrast Image: Canyon'</span>);
+imshow(uint8(out)),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Contrast Image: Canyon}'</span>);
+pause(1);
+
+figure(<span class="string">'name'</span>,<span class="string">'Contrast Plot: Canyon'</span>);plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 3.969903 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <h2>Histogram Eq<a name="6"></a></h2><p>Equailize the histrogram of the image.</p><h2>Histogram Eq: Barbara<a name="7"></a></h2><pre class="codeinput">tic
+img=imgBarbara;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Barbara'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Barbara}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1)
+pause(1);
+
+out=myHE(img);
+figure(<span class="string">'name'</span>,<span class="string">'Histogram Eq: Barbara'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Histogram Eq: Barbara}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+figure(<span class="string">'name'</span>,<span class="string">'Histogram Eq: Barbara'</span>),imhist(uint8(out));
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 5.793031 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_10.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_11.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_12.png" alt=""> <h2>Histogram Eq: Tem<a name="8"></a></h2><pre class="codeinput">tic
+img=imgTem;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Tem'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Tem}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myHE(img);
+figure(<span class="string">'name'</span>,<span class="string">'Histogram Eq: Tem'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Histogram Eq: Tem}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+figure(<span class="string">'name'</span>,<span class="string">'Histogram Eq: Tem'</span>),imhist(uint8(out));
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 4.052315 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_13.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_14.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_15.png" alt=""> <h2>Histogram Eq: Canyon<a name="9"></a></h2><pre class="codeinput">tic
+img=imgCanyon;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Canyon'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Canyon}'</span>);
+pause(1);
+
+out=myHE(img);
+figure(<span class="string">'name'</span>,<span class="string">'Histogram Eq: Canyon'</span>);
+imshow(uint8(out)),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Histogram Eq: Canyon}'</span>);
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 2.710399 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_16.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_17.png" alt=""> <h2>Adaptive Histogram Equalization<a name="10"></a></h2><p>Finds new enhanced intensity by using AHE algo and by NxN window size. At at border the portion of window is trimmed which is going out of image.</p><h2>Logic of AHE used<a name="11"></a></h2><p>For speeding up the process we are removing the old intensity count and adding new intensity count in the histogram of previous NxN block. Movement of Block of NxN is from Left to Right then Right to Left i.e at the right end move block Down by 1 and then start moving from Right to Left.</p><h2>Observations made in AHE<a name="12"></a></h2><p>Small window size : Gives a unclear image.Noise gets enhanced.</p><p>Large window size : Gives a image very close to histogram equilization.</p><p>After parameter tunning we get a image such that information can be seen very accurately.</p><h2>AHE : Barbara<a name="16"></a></h2><pre class="codeinput">tic
+img=imgBarbara;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Barbara'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Barbara}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myAHE(img,281);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Barbara'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Barbara with Window  281x281}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+<span class="comment">%figure('name','AHE: Barbara'),imhist(uint8(out));</span>
+pause(1);
+
+out=myAHE(img,11);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Barbara'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Barbara with Window 11x11}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+<span class="comment">%figure('name','AHE: Barbara 2'),imhist(uint8(out));</span>
+pause(1);
+
+
+out=myAHE(img,501);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Barbara'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Barbara with Window 501x501}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+<span class="comment">%figure('name','AHE: Barbara 2'),imhist(uint8(out));</span>
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 19.954804 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_18.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_19.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_20.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_21.png" alt=""> <h2>AHE : TEM<a name="17"></a></h2><pre class="codeinput">tic
+img=imgTem;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Tem'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Tem}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myAHE(img,121);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Tem'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Tem with Window 121x121}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+<span class="comment">%figure('name','AHE: Tem'),imhist(uint8(out));</span>
+pause(1);
+
+out=myAHE(img,11);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Tem'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Tem with Window 11x11}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+<span class="comment">%figure('name','AHE: Tem'),imhist(uint8(out));</span>
+pause(1);
+
+out=myAHE(img,541);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Tem'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Tem with Window 541x541}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+<span class="comment">%figure('name','AHE: Tem'),imhist(uint8(out));</span>
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 32.148507 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_22.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_23.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_24.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_25.png" alt=""> <h2>AHE : Canyon<a name="18"></a></h2><pre class="codeinput">tic
+img=imgCanyon;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Canyon'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Canyon}'</span>);
+pause(1);
+
+out=myAHE(img,221);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Canyon'</span>);
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Canyon with Window 221x221}'</span>);
+pause(1);
+
+out=myAHE(img,11);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Canyon'</span>);
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Canyon with Window 11x11}'</span>);
+pause(1);
+
+out=myAHE(img,343);
+figure(<span class="string">'name'</span>,<span class="string">'AHE: Canyon'</span>);
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}AHE: Canyon with Window 343x343}'</span>);
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 47.038648 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_26.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_27.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_28.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_29.png" alt=""> <h2>CLAHE<a name="19"></a></h2><p>Limited AHE (CLAHE) differs from ordinary adaptive histogram equalization in its contrast limiting.</p><h2>Logic for thersholding in CLAHE<a name="20"></a></h2><p>Limits the amplification by : Clip the histogram at a predefined value (free parameter) Redistribute the mass uniformly throughout the range Then, compute the CDF</p><h2>Observation made in CLAHE<a name="21"></a></h2><p>For large thresholding value lot of information can be gained.</p><h2>CLAHE : Barbara<a name="22"></a></h2><pre class="codeinput">tic
+img=imgBarbara;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Barbara'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Barbara}'</span>);
+pause(1);
+
+out=myCLAHE(img,251,0.2);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE: Barbara with Window 251x251 and Threshold=0.2'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 251x251 and Threshold=0.2}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myCLAHE(img,11,0.1);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE: Barbara with Window 11x11 and Threshold=0.1'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 11x11 and Threshold=0.1}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myCLAHE(img,511,0.2);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE: Barbara with Window 511x511 and Threshold=0.1'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 511x511 and Threshold=0.1}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+<span class="comment">%figure('name','Histogram Eq: Barbara'),imhist(uint8(out));</span>
+toc
+</pre><pre class="codeoutput">Elapsed time is 27.816313 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_30.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_31.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_32.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_33.png" alt=""> <h2>CLAHE : Tem<a name="23"></a></h2><pre class="codeinput">tic
+img=imgTem;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Tem'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Tem}'</span>);
+
+out=myCLAHE(img,300,0.1);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE: Tem with Window 251x251 and Threshold=0.2'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Tem with Window 300x300 and Threshold=0.1}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myCLAHE(img,11,0.05);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE: Tem with Window 11x11 and Threshold=0.1'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Tem with Window 11x11 and Threshold=0.5}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+out=myCLAHE(img,511,0.05);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE: Tem with Window 511x511 and Threshold=0.1'</span>);
+imshow(out,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Tem with Window 511x511 and Threshold=0.5}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+pause(1);
+
+<span class="comment">%figure('name','Histogram Eq: Barbara'),imhist(uint8(out));</span>
+toc
+</pre><pre class="codeoutput">Elapsed time is 43.963563 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_34.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_35.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_36.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_37.png" alt=""> <h2>CLAHE : Canyon<a name="24"></a></h2><pre class="codeinput">tic
+img=imgCanyon;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image: Canyon'</span>);
+imshow(img,cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Original Image: Canyon}'</span>);
+pause(1);
+
+out=myCLAHE(img,221,[0.001,0.02,0.002]);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE Eq: Canyon'</span>);
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 221x221 and Threshold=[0.001,0.02,0.002]}'</span>);
+pause(1);
+
+out=myCLAHE(img,11,[0.00001,0.00001,0.00001]);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE Eq: Canyon'</span>);
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Tem with Window 11x11 and Threshold=0.0005,0.01,0.001]}'</span>);
+pause(1);
+
+out=myCLAHE(img,331,[0.0005,0.01,0.001]);
+figure(<span class="string">'name'</span>,<span class="string">'CLAHE Eq: Canyon'</span>);
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}CLAHE: Tem with Window 331x331 and Threshold=0.0005,0.01,0.001]}'</span>);
+pause(1);
+
+toc
+</pre><pre class="codeoutput">Elapsed time is 86.282368 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_38.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_39.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_40.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_41.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Assignment 1 REPLACE_WITH_DASH_DASH Question 2
+% CS-663
+% Group-16305R011,163059009,16305
+
+%%
+fileBarbara='../data/barbara.png';
+fileTem='../data/TEM.png';
+fileCanyon='../data/canyon.png';
+imgBarbara=imread(fileBarbara);
+imgTem=imread(fileTem);
+imgCanyon=imread(fileCanyon);
+%% Linear Contrast
+% Contrast stretching (often called normalization) is a simple image enhancement technique that attempts to improve the contrast in an image
+% by `stretching' the range of intensity values it contains to span a
+% desired range of values.
+%%
+tic
+img=imgBarbara;
+figure('name','Original Image: Barbara');
+cmGray=colormap(gray(256));
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Barbara}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+[out,intensities]=myLinearContrastStretching(img,[90,60],[180,230]);
+figure('name','Contrast Image: Barbara');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Contrast Image: Barbara}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+figure('name','Contrast Plot: Barbara'),plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
+title('\fontsize{10}{\color{magenta}Contrast Plot}');
+pause(1);
+
+toc
+%% Linear Contrast: Temp
+tic
+img=imgTem;
+figure('name','Original Image: TEM');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: TEM}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+[out,intensities]=myLinearContrastStretching(img,[130,30],[180,220]);
+figure('name','Contrast Image: TEM');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Contrast Image: TEM}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+figure('name','Contrast Plot: Tem');plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
+title('\fontsize{10}{\color{magenta}Contrast Plot}');
+pause(1);
+
+toc
+%% Linear Contrast: Canyon
+tic
+img=imgCanyon;
+figure('name','Original Image: Canyon');
+imshow(img),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Canyon}');
+pause(1);
+
+[out,intensities]=myLinearContrastStretching(img,[40,20],[160,200]);
+figure('name','Contrast Image: Canyon');
+imshow(uint8(out)),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Contrast Image: Canyon}');
+pause(1);
+
+figure('name','Contrast Plot: Canyon');plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
+pause(1);
+
+toc
+%% Histogram Eq
+% Equailize the histrogram of the image.
+
+%% Histogram Eq: Barbara
+tic
+img=imgBarbara;
+figure('name','Original Image: Barbara');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Barbara}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1)
+pause(1);
+
+out=myHE(img);
+figure('name','Histogram Eq: Barbara');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Histogram Eq: Barbara}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+figure('name','Histogram Eq: Barbara'),imhist(uint8(out));
+pause(1);
+
+toc
+%% Histogram Eq: Tem
+tic
+img=imgTem;
+figure('name','Original Image: Tem');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Tem}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myHE(img);
+figure('name','Histogram Eq: Tem');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Histogram Eq: Tem}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+figure('name','Histogram Eq: Tem'),imhist(uint8(out));
+pause(1);
+
+toc
+%% Histogram Eq: Canyon
+tic
+img=imgCanyon;
+figure('name','Original Image: Canyon');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Canyon}');
+pause(1);
+
+out=myHE(img);
+figure('name','Histogram Eq: Canyon');
+imshow(uint8(out)),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Histogram Eq: Canyon}');
+pause(1);
+
+toc
+
+%% Adaptive Histogram Equalization
+% Finds new enhanced intensity by using AHE algo and by NxN window size.
+% At at border the portion of window is trimmed which is going out of
+% image.
+
+
+%% Logic of AHE used
+% For speeding up the process we are removing the old intensity count and adding new
+% intensity count in the histogram of previous NxN block.
+% Movement of Block of NxN is from Left to Right then Right to Left i.e at the right end move 
+% block Down by 1 and then start moving from Right to Left. 
+
+%% Observations made in AHE 
+%%
+% Small window size : Gives a unclear image.Noise gets enhanced.
+%%
+% Large window size : Gives a image very close to histogram equilization.
+
+%%
+% After parameter tunning we get a image such that information can be seen very accurately.
+%% AHE : Barbara
+tic
+img=imgBarbara;
+figure('name','Original Image: Barbara');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Barbara}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myAHE(img,281);
+figure('name','AHE: Barbara');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Barbara with Window  281x281}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%figure('name','AHE: Barbara'),imhist(uint8(out));
+pause(1);
+
+out=myAHE(img,11);
+figure('name','AHE: Barbara');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Barbara with Window 11x11}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%figure('name','AHE: Barbara 2'),imhist(uint8(out));
+pause(1);
+
+
+out=myAHE(img,501);
+figure('name','AHE: Barbara');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Barbara with Window 501x501}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%figure('name','AHE: Barbara 2'),imhist(uint8(out));
+
+toc
+%% AHE : TEM
+tic
+img=imgTem;
+figure('name','Original Image: Tem');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Tem}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myAHE(img,121);
+figure('name','AHE: Tem');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Tem with Window 121x121}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%figure('name','AHE: Tem'),imhist(uint8(out));
+pause(1);
+
+out=myAHE(img,11);
+figure('name','AHE: Tem');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Tem with Window 11x11}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%figure('name','AHE: Tem'),imhist(uint8(out));
+pause(1);
+
+out=myAHE(img,541);
+figure('name','AHE: Tem');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Tem with Window 541x541}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%figure('name','AHE: Tem'),imhist(uint8(out));
+pause(1);
+
+toc
+
+%% AHE : Canyon
+tic
+img=imgCanyon;
+figure('name','Original Image: Canyon');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Canyon}');
+pause(1);
+
+out=myAHE(img,221);
+figure('name','AHE: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Canyon with Window 221x221}');
+pause(1);
+
+out=myAHE(img,11);
+figure('name','AHE: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Canyon with Window 11x11}');
+pause(1);
+
+out=myAHE(img,343);
+figure('name','AHE: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}AHE: Canyon with Window 343x343}');
+pause(1);
+
+toc
+%% CLAHE
+% Limited AHE (CLAHE) differs from ordinary adaptive histogram equalization in its contrast limiting.
+
+%% Logic for thersholding in CLAHE
+% Limits the amplification by : 
+% Clip the histogram at a predefined value (free parameter)
+% Redistribute the mass uniformly throughout the range
+% Then, compute the CDF
+
+%% Observation made in CLAHE
+% For large thresholding value lot of information can be gained.
+
+%% CLAHE : Barbara
+tic
+img=imgBarbara;
+figure('name','Original Image: Barbara');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Barbara}');
+pause(1);
+
+out=myCLAHE(img,251,0.2);
+figure('name','CLAHE: Barbara with Window 251x251 and Threshold=0.2');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 251x251 and Threshold=0.2}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myCLAHE(img,11,0.1);
+figure('name','CLAHE: Barbara with Window 11x11 and Threshold=0.1');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 11x11 and Threshold=0.1}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myCLAHE(img,511,0.2);
+figure('name','CLAHE: Barbara with Window 511x511 and Threshold=0.1');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 511x511 and Threshold=0.1}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+%figure('name','Histogram Eq: Barbara'),imhist(uint8(out));
+toc
+
+%% CLAHE : Tem
+
+tic
+img=imgTem;
+figure('name','Original Image: Tem');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Tem}');
+
+out=myCLAHE(img,300,0.1);
+figure('name','CLAHE: Tem with Window 251x251 and Threshold=0.2');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Tem with Window 300x300 and Threshold=0.1}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myCLAHE(img,11,0.05);
+figure('name','CLAHE: Tem with Window 11x11 and Threshold=0.1');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Tem with Window 11x11 and Threshold=0.5}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+out=myCLAHE(img,511,0.05);
+figure('name','CLAHE: Tem with Window 511x511 and Threshold=0.1');
+imshow(out,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Tem with Window 511x511 and Threshold=0.5}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(1);
+
+%figure('name','Histogram Eq: Barbara'),imhist(uint8(out));
+toc
+
+%% CLAHE : Canyon
+
+tic
+img=imgCanyon;
+figure('name','Original Image: Canyon');
+imshow(img,cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Original Image: Canyon}');
+pause(1);
+
+out=myCLAHE(img,221,[0.001,0.02,0.002]);
+figure('name','CLAHE Eq: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Canyon with Window 221x221 and Threshold=[0.001,0.02,0.002]}');
+pause(1);
+
+out=myCLAHE(img,11,[0.00001,0.00001,0.00001]);
+figure('name','CLAHE Eq: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Tem with Window 11x11 and Threshold=0.0005,0.01,0.001]}');
+pause(1);
+
+out=myCLAHE(img,331,[0.0005,0.01,0.001]);
+figure('name','CLAHE Eq: Canyon');
+imshow(uint8(out),cmGray),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}CLAHE: Tem with Window 331x331 and Threshold=0.0005,0.01,0.001]}');
+pause(1);
+
+toc
+##### SOURCE END #####
+--></body></html>

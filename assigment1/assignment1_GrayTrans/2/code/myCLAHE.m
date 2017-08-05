@@ -5,10 +5,14 @@ function outImg = myCLAHE(img,windowSize,hThershold)
 % Adaptive Histogram Equalization: AHE
     [m,n,k]=size(img);
     z=zeros(m,n,k);  
+    tempHThershold=hThershold;   
     for layer=1:1:k
         maskCoordinate=[];
         histogram=zeros(256,1);    
         layerImg=img(:,:,layer);
+        if(k==3)
+            hThershold=tempHThershold(k);            
+        end 
         for row=1:2:m        
             % Scan: Left -> Right
             for col=1:1:n
