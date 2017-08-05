@@ -2,12 +2,10 @@
 fileBarbara='../data/barbara.png';
 fileTem='../data/TEM.png';
 fileCanyon='../data/canyon.png';
-file='/media/khursheed/DATA/photo/farewell 2013/photo1028.jpg';
 cmGray=colormap(gray(256));
 imgBarbara=imread(fileBarbara);
 imgTem=imread(fileTem);
 imgCanyon=imread(fileCanyon);
-tempImg=imread(file);
 
 %imfinfo(imgCanyon)
 tic;
@@ -70,7 +68,7 @@ tic
 img=imgBarbara;
 figure('name','Original Image: Barbara');
 imshow(img,cmGray),daspect([1,1,1]);
-out=myAHE1(img,251);
+out=myAHE1(img,151);
 figure('name','Histogram Eq: Barbara'),imhist(uint8(out));
 figure('name','Histogram Eq: Barbara');
 imshow(out,cmGray),daspect([1,1,1]);
@@ -113,7 +111,7 @@ figure('name','Histogram Eq: Barbara');
 imshow(out,cmGray),daspect([1,1,1]);
 toc
 
-%% AHE : Canyon
+%% CLAHE : Canyon
 tic
 img=imgCanyon;
 figure('name','Original Image: Canyon');

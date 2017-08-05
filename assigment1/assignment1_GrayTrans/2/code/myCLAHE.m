@@ -159,7 +159,7 @@ function [newVal,maskCoordinate,newHistogram]=getIntesity(img,coordinate,windowS
     perIntensityDistribution=floor(countExceedingFreq/numberOfIntensity);
     %disp(max(copyHist))
     if( ~isempty(exceedingIntensity) && perIntensityDistribution>0)   
-        fprintf('pInte=%d\n',perIntensityDistribution);
+        %fprintf('pInte=%d\n',perIntensityDistribution);
         for i=1:1:256
             % Redistribute the exceeded frequency 
             if(copyHist(i) ~= 0)
