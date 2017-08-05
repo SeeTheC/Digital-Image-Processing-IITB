@@ -32,13 +32,13 @@ function intensities= getStretchedIntensity(thersholdPoint1,thersholdPoint2)
     % y = slope*x - slope*x1 + y1
     slope1=(s1-y1)/(r1-x1);
     slope2=(s2-s1)/(r2-r1);
-    slope3=(y2-s2)/(x2-s2);    
+    slope3=(y2-s2)/(x2-r2);    
     for i=0:1:inputIntensity-1
        if(i<=r1)
            y=(slope1*i) - (slope1*x1) + y1;
        elseif(i>r1 && i<= r2)
            y=(slope2*i) - (slope2*r1) + s1;
-       else(i>r2)
+       elseif(i>r2)
            y=(slope3*i) - (slope3*r2) + s2;
        end
        z(i+1)=y;

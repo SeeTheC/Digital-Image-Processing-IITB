@@ -44,13 +44,12 @@ colorbar(),set(gca, 'Position', o1);
 
 figure('name','Contrast Plot');plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
 title('\fontsize{10}{\color{magenta}Contrast Plot}');
-
 %% Linear Contrast: Canyon
 img=imgCanyon;
 figure('name','Original Image: Canyon');
 imshow(img),daspect([1,1,1]);
 title('\fontsize{10}{\color{red}Original Image: Canyon}');
-[out,intensities]=myLinearContrastStretching(img,[40,20],[160,200]);
+[out,intensities]=myLinearContrastStretching(img,[0,80],[180,200]);
 figure('name','Contrast Plot');plot([0:255],intensities),xlim([0 255]),ylim([0 255]);
 figure('name','Contrast Image: Canyon');
 imshow(uint8(out)),daspect([1,1,1]);
