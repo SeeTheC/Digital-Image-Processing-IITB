@@ -1,52 +1,41 @@
-function [corrupted,filtered,spaceMask]= myBilateralFiltering(img,windowSize,sigmaSpace,sigmaIntensity)
+function [corrupted,filtered]= myBilateralFiltering(img,windowSize,sigmaSpace,sigmaIntensity)
     [row,col]=size(img);
     noise=guassainNoise(row,col);    
     out=zeros(row,col);
-    corrupted=noise+img;   
+    corrupted=noise+img;
+    filtered=noise;
     % F(||P-Q||) is the Guassian distance fExponenet is the power of
     % e^-exponent
     mask=distance2DMask([windowSize windowSize]);
-    fDistance=gaussianMask(mask,sigmaSpace);     
+    fDistance=gaussianMask(mask,sigmaSpace);    
     for i=1:row
         for j=1:col
-            out(i,j)=bilateralFilterVal(corrupted,[i j],windowSize,fDistance,sigmaIntensity);
+            out(i,j)=bilateralFilterVal(img,[i j],windowSize,fDistance,sigmaIntensity);
         end
     end 
-    filtered=out;
-    spaceMask=fDistance;
 end
 
 % point: (x,y)
 function filteredVal=bilateralFilterVal(img,point,windowSize,fDistance,sigmaIntensity)
     [row,col]=size(img);
-    x=point(1);y=point(2);    
+    x=point(1);x=point(2);    
     [x1,y1,x2,y2]=getWindowCoordinate(windowSize,point,[row,col]);
     ip=img(x,y);
     imgWindow=img(x1:x2,y1:y2);
-    if(needToCropMask([x y],[x1,y1,x2,y2]))
-        fDistance=cropMask(fDistance,[x1,y1,x2,y2],[x y]);
-    end
+    if( needToCropMask([x[
     % Finding G(|Ii-Ip|) exponent value
     intensityDiff=imgWindow-ip;
     intensityDiffSq=intensityDiff.^2;
     gDistance=gaussianMask(intensityDiffSq,sigmaIntensity);    
-    %finding F(.)*G(.)        
-    
+    %finding F(.)*G(.) 
     W=fDistance.*gDistance;
     numerator=sum(sum(imgWindow.*W));
     denominator=sum(sum(W));
     Ip=numerator/denominator;
-    
-    %guassian
-    %W=fDistance;
-    %numerator=sum(sum(imgWindow.*W));
-    %denominator=sum(sum(W));
-    %Ip=numerator/denominator;
-    
     filteredVal=Ip;        
 end
 
-% Generate IID guassain noise
+
 function noise= guassainNoise(row,col)    
     %adding noise to an image
     % sd is 5% of Intensity range. 5*256=12.8
@@ -60,13 +49,13 @@ end
 % dim should be Odd then we will able center
 function mask=distance2DMask(dim)
     % Finds the Eucledian Norm ||P-Q||^2 where p=(x1,y1) and q(x2,y2)
-    row=dim(1);col=dim(2);    
+    row=dim(1);col=dim(1);    
     centerX=ceil(row/2);centerY=ceil(col/2);
     [r,c] = ndgrid(1:dim, 1:dim);
     % Xi-x
     xDiff=r-centerX;
     % Yi-y
-    yDiff=c-centerY;
+    yDiff=c-centerX;
     % Taking Sq (Xi-x)^2 & (Yi-y)^2
     xDiffSq=xDiff.^2;
     yDiffSq=yDiff.^2;    
@@ -87,12 +76,12 @@ end
 function bool=needToCropMask(centerCoordinate,boxCoordinate)
     x=centerCoordinate(1);y=centerCoordinate(2);
     x1=boxCoordinate(1);y1=boxCoordinate(2);
-    x2=boxCoordinate(3);y2=boxCoordinate(4);
+    x2=boxCoordinate(2);y2=boxCoordinate(3);
     
-    if( x-x1 == x2-x && y-y1==y2-y )
-        bool=0;% window is fitting fully
-    else 
+    if( x== x1 || x== x2 || y==y1 || y==y2 )
         bool=1;
+    else 
+        bool=0;
     end
 end
 
@@ -102,7 +91,7 @@ function cropped=cropMask(mask,boxCoordinate,center)
     [row,col]=size(mask);
     x=ceil(row/2);y=ceil(col/2);
     x1=boxCoordinate(1);y1=boxCoordinate(2);
-    x2=boxCoordinate(3);y2=boxCoordinate(4);
+    x2=boxCoordinate(2);y2=boxCoordinate(3);
     cX=center(1);cY=center(2);
     xDiff=x-cX;yDiff=y-cY;
     cropped=mask(x1+xDiff:x2+xDiff,y1+yDiff:y2+yDiff);
@@ -110,7 +99,7 @@ end
 
 % Return the [x1 y1 x2 y2] coordinate of window with center as centerCoordinate
 function [x1,y1,x2,y2]=getWindowCoordinate(windowSize,centerCoordinate,imageDim)
-    m=imageDim(1);n=imageDim(2);
+    m=imageDim(1);n=imageDim(1);
     x=centerCoordinate(1);y=centerCoordinate(2);    
     N=floor((windowSize-1)/2);
     if(N<0)
