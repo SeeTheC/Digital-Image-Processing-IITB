@@ -24,12 +24,13 @@ toc;
 
 %%
 
-%figure;
-%j = imnoise(uint8(img),'gaussian',0,0.01);
-%imshow(j,colormap(gray(256)));
-
+figure;
+sigma=0.05*256;
+imshow(j,colormap(gray(256)));
+k=uint8(img1)-j;
 %I = imread('eight.tif');
 %J = imnoise(I,'salt & pepper',0.02);
 %figure, imshow(I);
 %figure, imshow(J);
+%%
 
