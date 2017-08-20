@@ -1,6 +1,6 @@
-function [corrupted,filtered,spaceMask]= myBilateralFiltering(img,windowSize,sigmaSpace,sigmaIntensity)
+function [corrupted,filtered,spaceMask,rmsError]= myBilateralFiltering(img,cmap,windowSize,sigmaSpace,sigmaIntensity)
     [row,col]=size(img);
-    noise=guassainNoise(row,col);    
+    noise=guassainNoise(row,col,cmap);    
     out=zeros(row,col);
     corrupted=noise+img;   
     % F(||P-Q||) is the Guassian distance fExponenet is the power of
@@ -14,6 +14,7 @@ function [corrupted,filtered,spaceMask]= myBilateralFiltering(img,windowSize,sig
     end 
     filtered=out;
     spaceMask=fDistance;
+    rmsError=sqrt(sum(sum((filtered-img).^2))/numel(img));
 end
 
 % point: (x,y)
@@ -47,12 +48,12 @@ function filteredVal=bilateralFilterVal(img,point,windowSize,fDistance,sigmaInte
 end
 
 % Generate IID guassain noise
-function noise= guassainNoise(row,col)    
+function noise= guassainNoise(row,col,cmap)    
     %adding noise to an image
     % sd is 5% of Intensity range. 5*256=12.8
     rng(0,'twister');
     mean = 0.0;
-    sigma = 0.05*256;
+    sigma = 0.05*cmap;
     noise = sigma.*randn(row,col) + mean;    
     %j = imnoise(uint8(img1),'gaussian',0,sigma^2/255^2);
 end
