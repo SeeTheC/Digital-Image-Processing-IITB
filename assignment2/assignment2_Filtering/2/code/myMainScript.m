@@ -1,58 +1,151 @@
 %% Intialization
 file='../data/barbara.mat';
-cmap=100;
+cmap=150;
 l = load(file);
 img1=l.imageOrig;
-%% Bilateral filtering
+%% Original Image
 tic;
 img=img1;
-sigmaSpace=10;
-sigmaIntensity=25;
 figure('name','Original Image');
 imshow(img,colormap(gray(cmap)));
-title('\fontsize{10}{\color{red}barbara}');
+title('\fontsize{10}{\color{red}Original Image: Barbara}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
+pause(1);
 
-figure('name','Corrupted - barbara');
-[corrupted,filtered,spaceMask,rmsError]=myBilateralFiltering(img,cmap,41,sigmaSpace,sigmaIntensity);
-imshow(corrupted,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Corrupted - barbara}');
-axis tight,axis on;
-o1 = get(gca, 'Position');
-colorbar(),set(gca, 'Position', o1);
+%% Bilateral Filtering
+% myBilateralFiltering function take image, then it corrupts the image by
+% Guassain nosie with sigma 5% of the intensity range. After that it
+% process the noisy by the Bilateral filtering. For performing the Bilateral  
+% filtering in *Spacial* and *Intensity* region it use Gaussian Kernel with below configuration 
+% as input: 
+%
+% * Sigma Space: 2
+% * Sigma Intensity: 28
+% * Window Size: 31x31
+% 
+% *Output:* Returns three thing respectively
+%
+% # Corruted/Noisy image 
+% # Filtered Image
+% # RMSD of Filtered and Original image.....
+%
+%
+tic
+windowSize=31;
+sigmaSpace=2;
+sigmaIntensity=28;
+[corrupted,filtered,spaceMask,rmsError]=myBilateralFiltering(img,cmap,windowSize,sigmaSpace,sigmaIntensity);
+toc;
 
-figure('name','Bilateral Filter - barbara');
-imshow(filtered,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Bilateral Filter - barbara}');
-axis tight,axis on;
-o1 = get(gca, 'Position');
-colorbar(),set(gca, 'Position', o1);
-
+%% Spatial
+% Showing the Spatial mask with sigma-space as 2
 figure('name','Spatial Mask');
-imshow(uint8(spaceMask*cmap),colormap(gray(cmap)));
+imshow(imresize(spaceMask*cmap,4),colormap(gray(cmap)));
 title('\fontsize{10}{\color{magenta}Spatial}');
-
-% Finding RMS of image
-fprintf('\nSigSpace:%d SigInt:%d  RMS of the image:%f\n',sigmaSpace,sigmaIntensity,rmsError);
-
-
-% Comparison
-figure('name','Output - barbara');
+pause(2);
+%% Comparison: Tuned parameter
+% Comparing the result of filtered image with corrupted and original image.
+% *RMSD* is calculated between Noisy and Original image.
+%
+% 
+% <<rmsd.jpg>>
+% 
+figure('name','Output - barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(121);
 imshow(corrupted,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Corrupted - barbara}');
+title('\fontsize{10}{\color{red}Corrupted - Barbara}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
 subplot(122);
 imshow(filtered,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Bilateral Filter - barbara}');
+title('\fontsize{10}{\color{magenta}Bilateral Filter - Barbara [sigma-space=2],sigma-intesity=28]}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+pause(3);
+
+% Printing result
+fprintf('\nSigma Space:%d Sigma Intensity:%d  RMS of the image:%f\n',sigmaSpace,sigmaIntensity,rmsError);
+
+%% i) Comparison: (0.9 x tuned-sigma-space, tuned-sigma-intensity) 
+tic
+windowSize=31;
+sigmaSpace=0.9*2;
+sigmaIntensity=28;
+[corrupted,filtered,spaceMask,rmsError]=myBilateralFiltering(img,cmap,windowSize,sigmaSpace,sigmaIntensity);
+
+figure('name','Output - barbara','units','normalized','outerposition',[0 0 1 1]);
+subplot(121);
+imshow(corrupted,colormap(gray(cmap)));
+title('\fontsize{10}{\color{red}Corrupted - Barbara}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
-toc;
-%%
+subplot(122);
+imshow(filtered,colormap(gray(cmap)));
+title('\fontsize{10}{\color{magenta}Bilateral Filter - Barbara [sigma-space=0.9*2],sigma-intesity=28]}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+toc
+pause(3);
+
+% Printing result
+fprintf('\nSigma Space:%d Sigma Intensity:%d  RMS of the image:%f\n',sigmaSpace,sigmaIntensity,rmsError);
+%% ii) Comparison: (tuned-sigma-space, 0.9 x tuned-sigma-intensity) 
+tic
+windowSize=31;
+sigmaSpace=2;
+sigmaIntensity=0.9*28;
+[corrupted,filtered,spaceMask,rmsError]=myBilateralFiltering(img,cmap,windowSize,sigmaSpace,sigmaIntensity);
+
+figure('name','Output - barbara','units','normalized','outerposition',[0 0 1 1]);
+subplot(121);
+imshow(corrupted,colormap(gray(cmap)));
+title('\fontsize{10}{\color{red}Corrupted - Barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+subplot(122);
+imshow(filtered,colormap(gray(cmap)));
+title('\fontsize{10}{\color{magenta}Bilateral Filter - Barbara [sigma-space=2],sigma-intesity=0.9*28]}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+toc
+pause(3);
+
+% Printing result
+fprintf('\nSigma Space:%d Sigma Intensity:%d  RMS of the image:%f\n',sigmaSpace,sigmaIntensity,rmsError);
+%% iii) Comparison: (tuned-sigma-space, 1.1 x tuned-sigma-intensity) 
+tic
+windowSize=31;
+sigmaSpace=2;
+sigmaIntensity=1.1*28;
+[corrupted,filtered,spaceMask,rmsError]=myBilateralFiltering(img,cmap,windowSize,sigmaSpace,sigmaIntensity);
+
+figure('name','Output - barbara','units','normalized','outerposition',[0 0 1 1]);
+subplot(121);
+imshow(corrupted,colormap(gray(cmap)));
+title('\fontsize{10}{\color{red}Corrupted - Barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+subplot(122);
+imshow(filtered,colormap(gray(cmap)));
+title('\fontsize{10}{\color{magenta}Bilateral Filter - Barbara [sigma-space=2,sigma-intesity=1.1*28]}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+toc
+pause(3);
+
+% Printing result
+fprintf('\nSigma Space:%d Sigma Intensity:%d  RMS of the image:%f\n',sigmaSpace,sigmaIntensity,rmsError);
