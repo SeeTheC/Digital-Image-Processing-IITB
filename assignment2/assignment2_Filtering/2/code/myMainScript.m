@@ -1,4 +1,10 @@
+%% Assignment 1 -- Question 1
+% CS-663 Group-163059009,16305R011,16305R006
+
 %% Intialization
+% Intializing the *Color Map* to 150 as max value of intensity in the image
+% file is 100. 
+
 file='../data/barbara.mat';
 cmap=150;
 l = load(file);
@@ -15,9 +21,9 @@ colorbar(),set(gca, 'Position', o1);
 pause(1);
 
 %% Bilateral Filtering
-% myBilateralFiltering function take image, then it corrupts the image by
-% Guassain nosie with sigma 5% of the intensity range. After that it
-% process the noisy by the Bilateral filtering. For performing the Bilateral  
+% myBilateralFiltering function take image, then it corrupt's the image by
+% adding * *Guassain nosie* * with sigma as *5% of the intensity range* . After that, it
+% processes the noisy by the Bilateral filtering. For performing the Bilateral  
 % filtering in *Spacial* and *Intensity* region it use Gaussian Kernel with below configuration 
 % as input: 
 %
@@ -29,7 +35,7 @@ pause(1);
 %
 % # Corruted/Noisy image 
 % # Filtered Image
-% # RMSD of Filtered and Original image.....
+% # RMSD of Filtered and Original image.
 %
 %
 tic
@@ -38,7 +44,6 @@ sigmaSpace=2;
 sigmaIntensity=28;
 [corrupted,filtered,spaceMask,rmsError]=myBilateralFiltering(img,cmap,windowSize,sigmaSpace,sigmaIntensity);
 toc;
-
 %% Spatial
 % Showing the Spatial mask with sigma-space as 2
 figure('name','Spatial Mask');
@@ -70,6 +75,10 @@ pause(3);
 
 % Printing result
 fprintf('\nSigma Space:%d Sigma Intensity:%d  RMS of the image:%f\n',sigmaSpace,sigmaIntensity,rmsError);
+%% Observation
+%  While tuning sigam-space and sigma-Intesity below are few stats of the
+%  tuning. If we reduce the sigma intensity by large amount as compare to
+%  sigma-space the RMSD is increase drastically.
 
 %% i) Comparison: (0.9 x tuned-sigma-space, tuned-sigma-intensity) 
 tic
