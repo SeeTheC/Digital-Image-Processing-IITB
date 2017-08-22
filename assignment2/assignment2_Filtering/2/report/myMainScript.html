@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Assignment 1 -- Question 1</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-22"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>Assignment 2 -- Question 2</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-22"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Assignment 1 -- Question 1</h1><!--introduction--><p>CS-663 Group-163059009,16305R011,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intialization</a></li><li><a href="#2">Original Image</a></li><li><a href="#3">Bilateral Filtering</a></li><li><a href="#4">Spatial</a></li><li><a href="#5">Comparison: Tuned parameter</a></li><li><a href="#6">Observation</a></li><li><a href="#7">i) Comparison: (0.9 x tuned-sigma-space, tuned-sigma-intensity)</a></li><li><a href="#8">ii) Comparison: (tuned-sigma-space, 0.9 x tuned-sigma-intensity)</a></li><li><a href="#9">iii) Comparison: (tuned-sigma-space, 1.1 x tuned-sigma-intensity)</a></li></ul></div><h2>Intialization<a name="1"></a></h2><p>Intializing the <b>Color Map</b> to 150 as max value of intensity in the image file is 100.</p><pre class="codeinput">file=<span class="string">'../data/barbara.mat'</span>;
+  </style></head><body><div class="content"><h1>Assignment 2 -- Question 2</h1><!--introduction--><p>CS-663 Group-163059009,16305R011,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intialization</a></li><li><a href="#2">Original Image</a></li><li><a href="#3">Bilateral Filtering</a></li><li><a href="#4">Spatial</a></li><li><a href="#5">Comparison: Tuned parameter</a></li><li><a href="#6">Observation</a></li><li><a href="#7">i) Comparison: (0.9 x tuned-sigma-space, tuned-sigma-intensity)</a></li><li><a href="#8">ii) Comparison: (tuned-sigma-space, 0.9 x tuned-sigma-intensity)</a></li><li><a href="#9">iii) Comparison: (tuned-sigma-space, 1.1 x tuned-sigma-intensity)</a></li></ul></div><h2>Intialization<a name="1"></a></h2><p>Intializing the <b>Color Map</b> to 150 as max value of intensity in the image file is 100.</p><pre class="codeinput">file=<span class="string">'../data/barbara.mat'</span>;
 cmap=150;
 l = load(file);
 img1=l.imageOrig;
@@ -87,7 +87,7 @@ sigmaIntensity=28;
 toc;
 </pre><pre class="codeoutput">Elapsed time is 13.578242 seconds.
 </pre><h2>Spatial<a name="4"></a></h2><p>Showing the Spatial mask with sigma-space as 2</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Spatial Mask'</span>);
-imshow(imresize(spaceMask*cmap,4),colormap(gray(cmap)));
+imagesc(uint8(spaceMask*cmap)),colormap(gray(cmap)),colorbar();
 title(<span class="string">'\fontsize{10}{\color{magenta}Spatial}'</span>);
 pause(2);
 </pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Comparison: Tuned parameter<a name="5"></a></h2><p>Comparing the result of filtered image with corrupted and original image. <b>RMSD</b> is calculated between Filtered and Original image.</p><p><img vspace="5" hspace="5" src="rmsd.jpg" alt=""> </p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Output - barbara'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1]);

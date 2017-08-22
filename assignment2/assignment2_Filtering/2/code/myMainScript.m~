@@ -47,9 +47,9 @@ toc;
 %% Spatial
 % Showing the Spatial mask with sigma-space as 2
 figure('name','Spatial Mask');
-%imshow(imresize(spaceMask*cmap,4),colormap(gray(cmap)));
-imagesc(uint8(spaceMask*cmap)),colormap(gray(cmap)),colorbar();
+imshow(imresize(spaceMask*cmap,4),colormap(gray(cmap)));
 title('\fontsize{10}{\color{magenta}Spatial}');
+imagesc(uint8(spaceMask*cmap)),colormap(gray(cmap)),colorbar();
 pause(2);
 %% Comparison: Tuned parameter
 % Comparing the result of filtered image with corrupted and original image.
