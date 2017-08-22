@@ -1,5 +1,5 @@
-%% Assignment 1 -- Question 1
-% CS-663 Group-16305R011,163059009,16305R006
+%% Assignment 2 -- Question 1
+% CS-663 Group-163059009,16305R011,16305R006
 
 
 %% Unsharp Masking

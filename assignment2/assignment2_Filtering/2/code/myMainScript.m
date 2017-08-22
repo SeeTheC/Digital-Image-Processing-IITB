@@ -1,4 +1,4 @@
-%% Assignment 1 -- Question 1
+%% Assignment 2 -- Question 2
 % CS-663 Group-163059009,16305R011,16305R006
 
 %% Intialization

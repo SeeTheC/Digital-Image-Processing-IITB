@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Assignment 1 -- Question 1</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-22"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>Assignment 2 -- Question 3</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-22"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Assignment 1 -- Question 1</h1><!--introduction--><p>CS-663 Group-16305R011,163059009,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intialization</a></li><li><a href="#2">Original Image</a></li><li><a href="#3">Patch base filtering</a></li><li><a href="#4">Assumptions made</a></li><li><a href="#5">Comparison: Tuned parameter</a></li><li><a href="#6">Time Taken</a></li><li><a href="#7">Observation</a></li><li><a href="#8">Tuned-sigma-intensity = 28</a></li><li><a href="#9">Kernel</a></li></ul></div><h2>Intialization<a name="1"></a></h2><pre class="codeinput">file=<span class="string">'../data/barbara.mat'</span>;
+  </style></head><body><div class="content"><h1>Assignment 2 -- Question 3</h1><!--introduction--><p>CS-663 Group-163059009,16305R011,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intialization</a></li><li><a href="#2">Original Image</a></li><li><a href="#3">Patch base filtering</a></li><li><a href="#4">Assumptions made</a></li><li><a href="#5">Comparison: Tuned parameter</a></li><li><a href="#6">Time Taken achal</a></li><li><a href="#7">Observation</a></li><li><a href="#8">Tuned Parametes</a></li><li><a href="#9">Patch Kernel</a></li><li><a href="#10">i) Comparison: (0.9 x tuned-sigma (h))</a></li><li><a href="#11">ii) Comparison: (1.1 x tuned-sigma (h))</a></li></ul></div><h2>Intialization<a name="1"></a></h2><pre class="codeinput">file=<span class="string">'../data/barbara.mat'</span>;
 cmap=150;
 scale=1/2;
 l = load(file);
@@ -82,30 +82,27 @@ title(<span class="string">'\fontsize{10}{\color{red}barbara}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>Patch base filtering<a name="3"></a></h2><p>myPatchBasedFiltering function take image, then it corrupts the image by Guassain nosie with sigma 5% of the intensity range. After that it process the noisy by the Patch Based filtering. For performing the Patch Based filtering for <b>Intensity</b> region it use Gaussian Kernel with below configuration as input:</p><pre class="codeinput"><span class="comment">%</span>
-<span class="comment">% * Sigma Intensity: 50</span>
-<span class="comment">% * Window Size: 25x25</span>
-<span class="comment">% * Patch Size: 9x9</span>
-<span class="comment">%</span>
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>Patch base filtering<a name="3"></a></h2><p>myPatchBasedFiltering function take image, then it corrupts the image by Guassain nosie with sigma 5% of the intensity range. After that it process the noisy by the Patch Based filtering. For performing the Patch Based filtering for <b>Intensity</b> region it use Gaussian Kernel with below configuration as input:</p><div><ul><li>Sigma (h): 26</li><li>Sigma of Mask used to make patches <b>Isotropic</b>: 2</li><li>Window Size: 25x25</li><li>Patch Size: 9x9</li></ul>
+<p><b>Output:</b> Returns three thing respectively</p><div><ol><li>Corruted/Noisy image</li><li>Filtered Image</li><li> Mask used to make patches <b>Isotropic</b> with sigma 2</li></ol>
+</div>
 
-<span class="comment">% *Output:* Returns three thing respectively</span>
-<span class="comment">%</span>
-<span class="comment">% # Corruted/Noisy image</span>
-<span class="comment">% # Filtered Image</span>
-<span class="comment">% # RMSD of Filtered and Original image.....</span>
-<span class="comment">%</span>
-</pre><h2>Assumptions made<a name="4"></a></h2><p>We resize the image by subsampling by a factor of 2 along each dimension, and then applied Gaussian blur of standard deviation around 0.66 pixel width to the resized image. This is done to reduce the time of the code</p><h2>Comparison: Tuned parameter<a name="5"></a></h2><p>Comparing the result of filtered image with corrupted and original image. <b>RMSD</b> is calculated between filtered and blurred(gaussian) downsampled image.</p><p><img vspace="5" hspace="5" src="rmsd.jpg" alt=""> </p><h2>Time Taken<a name="6"></a></h2><p>myPatchBasedFiltering takes approx 250 sec to produce result</p><h2>Observation<a name="7"></a></h2><p>With increasing sigma value RMSD value decrease but only to a certain value then it becomes constant.</p><h2>Tuned-sigma-intensity = 28<a name="8"></a></h2><pre class="codeinput">tic
-[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2,28);
+<h2>Assumptions made<a name="4"></a></h2><p>We resize the image by subsampling by a factor of 2 along each dimension, and then applied Gaussian blur of standard deviation around 0.66 pixel width to the resized image. This is done to reduce the time of the code</p><h2>Comparison: Tuned parameter<a name="5"></a></h2><p>Comparing the result of filtered image with corrupted and original image. <b>RMSD</b> is calculated between filtered and blurred(gaussian) downsampled image.</p><p><img vspace="5" hspace="5" src="rmsd.jpg" alt=""> </p>
 
+<h2>Time Taken</h2><p> Time required for myPatchBasedFiltering takes approx 382 sec (6 mins) to produce result for image of size 256 x 256 </p><h2>Observation<a name="7"></a></h2><p>With increasing sigma value RMSD value decrease but only to a certain value then it becomes constant.</p><h2>Tuned Parametes<a name="8"></a></h2><p>Tuned sigma for making patch isotropic is 2 and sigf for patch similarity is 26. RMSD between the filtered and Original image is 5.102581.</p><pre class="codeinput">tic
+sigma=2;
+h=26;
+[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma,h);
 
+<span class="comment">% Showing Nosiy image</span>
 figure(<span class="string">'name'</span>,<span class="string">'barbara'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
-title(<span class="string">'\fontsize{10}{\color{magenta}Corrupted}'</span>);
+title(<span class="string">'\fontsize{10}{\color{red}Corrupted}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 
+<span class="comment">% Showing Filtered image</span>
 subplot(1,2,2);
 imshow(filtered,colormap(gray(cmap)));
 title(<span class="string">'\fontsize{10}{\color{magenta}Patch Based Filter}'</span>);
@@ -113,64 +110,77 @@ axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 
+<span class="comment">% Calculating RMDS</span>
+rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf(<span class="string">'Sigma:%d h:%d RMS of the image blur:%f\n'</span>,sigma,h,rmsError);
 
-<span class="comment">% Printing result</span>
-fprintf(<span class="string">'\nRMS of the image:%f\n'</span>,rmsError);
 toc
 pause(2);
-</pre><pre class="codeoutput">
-RMS of the image:5.846654
-Elapsed time is 477.935890 seconds.
-</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Kernel<a name="9"></a></h2><pre class="codeinput"><span class="comment">%mask used to make patches isotropic, as an image.</span>
+</pre><pre class="codeoutput">Sigma:2 h:26 RMS of the image blur:5.102581
+Elapsed time is 373.514881 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Patch Kernel<a name="9"></a></h2><p>Mask used to make patches isotropic, as an image. Gaussian is used  patch more isotropic (as compared to a square patch)</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Isotropic Mask'</span>);
+title(<span class="string">'\fontsize{10}{\color{magenta} Mask used to make patches isotropic, as an image.}'</span>);
 imagesc(uint8(patchMask*cmap)),colormap(gray(cmap)),colorbar();
 pause(2);
-</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <p>i) Comparison: (0.9 x tuned-sigma-intensity)</p><pre class="codeinput">[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2, 0.9*28);
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>i) Comparison: (0.9 x tuned-sigma-intensity(h))<a name="10"></a></h2><p>Sigma (h) is 0.9 * tuned sigma while othere parameters are constant. We are getting RMSD of the filtered image 4.922040. </p><pre class="codeinput">tic
+<span class="comment">%Patch Based Filtering</span>
+[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma,0.9*h);
+
+<span class="comment">% Showing Noisy image</span>
 figure(<span class="string">'name'</span>,<span class="string">'barbara'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
-title(<span class="string">'\fontsize{10}{\color{magenta}Corrupted}'</span>);
+title(<span class="string">'\fontsize{10}{\color{red}Corrupted}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 
+<span class="comment">% Showing Filtered image</span>
 subplot(1,2,2);
 imshow(filtered,colormap(gray(cmap)));
-title(<span class="string">'\fontsize{10}{\color{magenta}Patch Based Filter-[sigma-intesity=0.9*50]}'</span>);
+title(<span class="string">'\fontsize{10}{\color{magenta}Patch Based Filter-[sigma (h) =0.9*26]}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 
-<span class="comment">% Printing result</span>
-fprintf(<span class="string">'\nRMS of the image:%f\n'</span>,rmsError);
-</pre><pre class="codeoutput">
-RMS of the image:5.998555
-</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <p>ii) Comparison: (1.1 x tuned-sigma-intensity)</p><pre class="codeinput">[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2, 1.1*28);
+<span class="comment">% Calculating RMSD</span>
+rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf(<span class="string">'sigma:%d h:%d RMSD of filtered image:%f\n'</span>,sigma,h,rmsError);
+
+toc
+</pre><pre class="codeoutput">sigma:2 h:23.400 RMSD of filtered image:4.922040
+Elapsed time is 397.889722 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>ii) Comparison: (1.1 x tuned-sigma (h))<a name="11"></a></h2><p>Sigma (h) is 1.1 * tuned sigma while other parameters are constant. We are getting RMSD of the filtered image 5.296323</p><pre class="codeinput">tic
+<span class="comment">%Patch Based Filtering</span>
+[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma, 1.1*h);
+
+<span class="comment">% Showing Noisy image</span>
 figure(<span class="string">'name'</span>,<span class="string">'barbara'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
-title(<span class="string">'\fontsize{10}{\color{magenta}Corrupted}'</span>);
+title(<span class="string">'\fontsize{10}{\color{red}Corrupted}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 
+<span class="comment">% Showing Filtered image</span>
 subplot(1,2,2);
 imshow(filtered,colormap(gray(cmap)));
-title(<span class="string">'\fontsize{10}{\color{magenta}Patch Based Filter-[sigma-intesity=1.1*50]}'</span>);
+title(<span class="string">'\fontsize{10}{\color{magenta}Patch Based Filter-[sigma (h) =1.1*26]}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 
-<span class="comment">% Printing result</span>
-fprintf(<span class="string">'\nRMS of the image:%f\n'</span>,rmsError);
-
+<span class="comment">% Calculating RMSD</span>
+rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf(<span class="string">'sigma:%d h:%d RMS of the image:%f\n'</span>,1.1*sigma,h,rmsError);
 
 toc;
-</pre><pre class="codeoutput">
-RMS of the image:5.741147
-Elapsed time is 1284.842686 seconds.
+</pre><pre class="codeoutput">sigma:2 h:28.6000 RMS of the image:5.296323
+Elapsed time is 428.786847 seconds.
 </pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Assignment 1 REPLACE_WITH_DASH_DASH Question 1
+%% Assignment 2 REPLACE_WITH_DASH_DASH Question 1
 % CS-663 Group-16305R011,163059009,16305R006
 
 %% Intialization
@@ -198,9 +208,10 @@ colorbar(),set(gca, 'Position', o1);
 % process the noisy by the Patch Based filtering. For performing the Patch Based filtering 
 % for *Intensity* region it use Gaussian Kernel with below configuration 
 % as input: 
-
 %
-% * Sigma Intensity: 50
+%
+% * Sigma (h): 26
+% * Sigma of Mask used to make patches *Isotropic*: 2
 % * Window Size: 25x25
 % * Patch Size: 9x9
 % 
@@ -209,7 +220,7 @@ colorbar(),set(gca, 'Position', o1);
 %
 % # Corruted/Noisy image 
 % # Filtered Image
-% # RMSD of Filtered and Original image.....
+% # Mask used to make patches *Isotropic*: 2
 %
 
 %% Assumptions made
@@ -219,28 +230,33 @@ colorbar(),set(gca, 'Position', o1);
 %% Comparison: Tuned parameter
 % Comparing the result of filtered image with corrupted and original image.
 % *RMSD* is calculated between filtered and blurred(gaussian) downsampled image.
-%
 % 
 % <<rmsd.jpg>>
 % 
-%% Time Taken 
-% myPatchBasedFiltering takes approx 250 sec to produce result
+%% Time Taken achal
+% myPatchBasedFiltering takes approx 382 sec to produce result
 
 %% Observation
 % With increasing sigma value RMSD value decrease but only to a certain value then it becomes constant.
-%% Tuned-sigma-intensity = 28
+%% Tuned Parametes
+% Tuned sigma for making patch isotropic is 2 and sigf for patch similarity
+% is 26. RMSD between the filtered and Original image is 5.102581.
+
 tic
-[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2,28);
+sigma=2;
+h=26;
+[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma,h);
 
-
+% Showing Nosiy image
 figure('name','barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Corrupted}');
+title('\fontsize{10}{\color{red}Corrupted}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
+% Showing Filtered image
 subplot(1,2,2);
 imshow(filtered,colormap(gray(cmap)));
 title('\fontsize{10}{\color{magenta}Patch Based Filter}');
@@ -248,59 +264,78 @@ axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
+% Calculating RMDS 
+rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf('Sigma:%d h:%d RMS of the image blur:%f\n',sigma,h,rmsError);
 
-% Printing result
-fprintf('\nRMS of the image:%f\n',rmsError);
 toc
 pause(2);
-%% Kernel
-%mask used to make patches isotropic, as an image.
+
+%% Patch Kernel
+% Mask used to make patches isotropic, as an image. Gaussian is used  patch more isotropic (as compared to a square patch)
+
+figure('name','Isotropic Mask');
+title('\fontsize{10}{\color{magenta} Mask used to make patches isotropic, as an image.}');
 imagesc(uint8(patchMask*cmap)),colormap(gray(cmap)),colorbar();
 pause(2);
-%%
-% i) Comparison: (0.9 x tuned-sigma-intensity) 
 
-[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2, 0.9*28);
+
+%% i) Comparison: (0.9 x tuned-sigma-intensity(h)) 
+% Sigma (h) is 0.9 * tuned sigma while othere parameters are constant.
+
+tic 
+%Patch Based Filtering 
+[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma,0.9*h);
+
+% Showing Noisy image
 figure('name','barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Corrupted}');
+title('\fontsize{10}{\color{red}Corrupted}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
+% Showing Filtered image
 subplot(1,2,2);
 imshow(filtered,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Patch Based Filter-[sigma-intesity=0.9*50]}');
+title('\fontsize{10}{\color{magenta}Patch Based Filter-[sigma (h) =0.9*26]}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
-% Printing result
-fprintf('\nRMS of the image:%f\n',rmsError);
+% Calculating RMSD
+rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf('sigma:%d h:%d RMSD of filtered image:%f\n',sigma,h,rmsError);
 
-%%
-% ii) Comparison: (1.1 x tuned-sigma-intensity) 
+toc
+%% ii) Comparison: (1.1 x tuned-sigma (h)) 
+% Sigma (h) is 1.1 * tuned sigma while othere parameters are constant.
 
-[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2, 1.1*28);
+tic
+%Patch Based Filtering 
+[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma, 1.1*h);
+
+% Showing Nosiy image
 figure('name','barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Corrupted}');
+title('\fontsize{10}{\color{red}Corrupted}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
+% Showing Filtered image
 subplot(1,2,2);
 imshow(filtered,colormap(gray(cmap)));
-title('\fontsize{10}{\color{magenta}Patch Based Filter-[sigma-intesity=1.1*50]}');
+title('\fontsize{10}{\color{magenta}Patch Based Filter-[sigma (h) =1.1*26]}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
-% Printing result
-fprintf('\nRMS of the image:%f\n',rmsError);
-
+% Calculating RMSD
+rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf('sigma:%d h:%d RMS of the image:%f\n',sigma,h,rmsError);
 
 toc;
 ##### SOURCE END #####
