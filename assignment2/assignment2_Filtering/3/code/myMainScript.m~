@@ -26,10 +26,9 @@ colorbar(),set(gca, 'Position', o1);
 % process the noisy by the Patch Based filtering. For performing the Patch Based filtering 
 % for *Intensity* region it use Gaussian Kernel with below configuration 
 % as input: 
+
 %
-%
-% * Sigma (h): 26
-% 
+% * Sigma Intensity: 50
 % * Window Size: 25x25
 % * Patch Size: 9x9
 % 
@@ -38,7 +37,7 @@ colorbar(),set(gca, 'Position', o1);
 %
 % # Corruted/Noisy image 
 % # Filtered Image
-% # 
+% # RMSD of Filtered and Original image.....
 %
 
 %% Assumptions made
@@ -48,6 +47,7 @@ colorbar(),set(gca, 'Position', o1);
 %% Comparison: Tuned parameter
 % Comparing the result of filtered image with corrupted and original image.
 % *RMSD* is calculated between filtered and blurred(gaussian) downsampled image.
+%
 % 
 % <<rmsd.jpg>>
 % 
@@ -56,11 +56,13 @@ colorbar(),set(gca, 'Position', o1);
 
 %% Observation
 % With increasing sigma value RMSD value decrease but only to a certain value then it becomes constant.
-%% Tuned-h = 26
+%% Tuned-sigma-intensity = 28
 tic
 sigma=2;
-h=26;
-[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma,h);
+sigmaPatch=20;
+[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,sigma,sigmaPatch);
+
+
 figure('name','barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
@@ -75,24 +77,28 @@ title('\fontsize{10}{\color{magenta}Patch Based Filter}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
-
 % Printing result
-rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
-fprintf('sigma:%d h:%d RMS of the image blur:%f\n',sigma,h,rmsError);
-%sigma:2 h:26 RMS of the image blur:6.784701
-%Elapsed time is 33.750161 seconds.
+fprintf('sigma:%d spatch:%d RMS of the image blur:%f\n',sigma,sigmaPatch,rmsError);
+rmsError1=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
+fprintf('sigma:%d spatch:%d RMS of the image blur:%f\n',sigma,sigmaPatch,rmsError1);
+
 toc
 pause(2);
-
+% RMS of the image blur:4.855540 : sig= 0.6 20
+% RMS of the image with orig:6.477611
+% RMS of the image blur:7.010939 sigm 2 20
+% sigma:1 spatch:20 RMS of the image blur:5.008471
+% sigma:1 spatch:20 RMS of the image blur:6.566200
+% sigma:2 spatch:26 RMS of the image blur:5.131378
+%sigma:2 spatch:18 RMS of the image blur:6.708316 -- good
 %% Kernel
 %mask used to make patches isotropic, as an image.
-figure('name','Isotropic Mask');
-title('\fontsize{10}{\color{magenta} Mask used to make patches isotropic, as an image.}');
 imagesc(uint8(patchMask*cmap)),colormap(gray(cmap)),colorbar();
 pause(2);
 %%
 % i) Comparison: (0.9 x tuned-sigma-intensity) 
-[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma,0.9*h);
+
+[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2,0.9*28);
 figure('name','barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
@@ -109,13 +115,12 @@ o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
 % Printing result
-rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
-fprintf('sigma:%d h:%d RMS of the image blur:%f\n',sigma,h,rmsError);
+fprintf('\nRMS of the image:%f\n',rmsError);
 
 %%
 % ii) Comparison: (1.1 x tuned-sigma-intensity) 
 
-[corrupted,filtered,patchMask]=myPatchBasedFiltering(img,cmap,9,25,sigma, 1.1*h);
+[corrupted,filtered,patchMask,rmsError]=myPatchBasedFiltering(img,cmap,9,25,2, 1.1*28);
 figure('name','barbara','units','normalized','outerposition',[0 0 1 1]);
 subplot(1,2,1);
 imshow(corrupted,colormap(gray(cmap)));
@@ -132,7 +137,7 @@ o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 
 % Printing result
-rmsError=sqrt(sum(sum((filtered-imgShrink).^2))/numel(imgShrink));
-fprintf('sigma:%d h:%d RMS of the image blur:%f\n',sigma,h,rmsError);
+fprintf('\nRMS of the image:%f\n',rmsError);
+
 
 toc;

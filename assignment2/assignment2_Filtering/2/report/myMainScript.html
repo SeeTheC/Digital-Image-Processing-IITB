@@ -90,7 +90,7 @@ toc;
 imshow(imresize(spaceMask*cmap,4),colormap(gray(cmap)));
 title(<span class="string">'\fontsize{10}{\color{magenta}Spatial}'</span>);
 pause(2);
-</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Comparison: Tuned parameter<a name="5"></a></h2><p>Comparing the result of filtered image with corrupted and original image. <b>RMSD</b> is calculated between Noisy and Original image.</p><p><img vspace="5" hspace="5" src="rmsd.jpg" alt=""> </p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Output - barbara'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1]);
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Comparison: Tuned parameter<a name="5"></a></h2><p>Comparing the result of filtered image with corrupted and original image. <b>RMSD</b> is calculated between Filtered and Original image.</p><p><img vspace="5" hspace="5" src="rmsd.jpg" alt=""> </p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Output - barbara'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1]);
 subplot(121);
 imshow(corrupted,colormap(gray(cmap)));
 title(<span class="string">'\fontsize{10}{\color{red}Corrupted - Barbara}'</span>);

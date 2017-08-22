@@ -52,7 +52,7 @@ title('\fontsize{10}{\color{magenta}Spatial}');
 pause(2);
 %% Comparison: Tuned parameter
 % Comparing the result of filtered image with corrupted and original image.
-% *RMSD* is calculated between Noisy and Original image.
+% *RMSD* is calculated between Filtered and Original image.
 %
 % 
 % <<rmsd.jpg>>
