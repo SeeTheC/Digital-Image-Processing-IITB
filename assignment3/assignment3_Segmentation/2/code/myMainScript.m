@@ -29,8 +29,9 @@ colorbar(),set(gca, 'Position', o1);
 impixelinfo;
 %%
 tic 
-
-out=myMeanShiftSegmentation(GaussianBlurResizedImage,15,0.03);
+% best: 5 0.075 1
+%
+out=myMeanShiftSegmentation(GaussianBlurResizedImage,5,0.12,1.4);
 figure('name','myMeanShiftSegmentation: baboonColor');
 imshow(out);
 title('\fontsize{10}{\color{magenta}myMeanShiftSegmentation: baboonColor}');

@@ -1,14 +1,16 @@
-function outImg = myMeanShiftSegmentation(img,iteration,hBandwidth)
+function outImg = myMeanShiftSegmentation(img,iteration,hBandwidth,hDistance)
     [row,col,k]=size(img);
     out=zeros(row,col,k);
-    t=1;
+    % coordinateMtx
+    cMtx=coordinateMtx(row,col);    
+    t=1;% gradient acent parameter    
     for itter=1:1:iteration        
         for i=1:1:row
             for j=1:1:col
                 val=img(i,j,:);
-                meanshift=GaussianFilterVal1(img,[i j],hBandwidth);
-                newval=val+(t*meanshift);
-                out(i,j,1)=newval;
+                meanshift=GaussianFilterVal1(img,[i j],cMtx,hBandwidth,hDistance);
+                newval=val+(t*meanshift);                
+                out(i,j,:)=newval;
             end
         end
         img=out;
@@ -17,15 +19,31 @@ function outImg = myMeanShiftSegmentation(img,iteration,hBandwidth)
     outImg=out;
 end
 
-function shift=GaussianFilterVal1(img,point,hBandwidth)
+% Returns the (x,y) coordinate in as 2 Page mtx. Where 1st page is rows 
+%and 2nd is col 
+function mtx=coordinateMtx(row,col)
+    [r,c]=ndgrid(1:row, 1:col);
+    mtx(:,:,1)=r;
+    mtx(:,:,2)=c;   
+end
+function shift=GaussianFilterVal1(img,point,cMtx,hBandwidth,hDistance)
     x=point(1);y=point(2);    
     ip=img(x,y,:);
+    coordinate(1,1,1)=x;coordinate(1,1,2)=y;    
+    
+    % Intesity Kernel
     intensityDiff=bsxfun(@minus,img,ip);
-    intensityDiffSq=intensityDiff.^2;
+    intensityDiffSq=intensityDiff.^2;    
     % [r-rx]^2+[g-gx]^2+[b-bx]^2
     intensitySum=intensityDiffSq(:,:,1)+intensityDiffSq(:,:,2)+intensityDiffSq(:,:,3);    
     % Finding G(|Ii-Ip|) exponent value         
     kernelIntesity=gaussianMask(intensitySum,hBandwidth);
+    
+    %Distance Kernel
+    distanceDiff=bsxfun(@minus,cMtx,coordinate);
+    intensityDiffSq=intensityDiff.^2;    
+    
+    
     gaussianWt=bsxfun(@times,img,kernelIntesity);
     mean=sum(sum(gaussianWt))/sum(sum(kernelIntesity));
     shift=mean-ip;
