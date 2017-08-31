@@ -16,14 +16,12 @@ axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 toc;
-%hold on;
-%plot(100,100,'r.','MarkerSize',20)
 
 %% Harris corner detector
-windowSize=5;
+windowSize=7;
 sigma=1.3;
 blurSigma=0.01;
-k=0.22;
+k=0.16;
 [blurImg,cornernessMeasure,corners,SinglePointCorners,Ix,Iy] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k);
 
 % Guassian Blur Img
@@ -40,17 +38,16 @@ toc;
 % Corner-ness Measure 
 figure('name','Corner-ness Measure');
 colormap(gray);
-imshow(cornernessMeasure);
+imshow(cornernessMeasure>0);
 title('\fontsize{10}{\color{magenta}Corner-ness Measure}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 impixelinfo;
 toc;
-
-
 fprintf('Number of Corners:%d Single Piont\n',numel(corners),numel(SinglePointCorners));
-%%
+
+
 % Marks the Points
 figure('name','Corner Marked Image');
 pos   = corners;
@@ -61,22 +58,24 @@ title('\fontsize{10}{\color{magenta}Corner Marked Image}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
-colorbar();toc;
+impixelinfo;
+toc;
 
 
-% Marks the Points
-figure('name','SinglePointCorners');
+% Marks the Filtered Points
+figure('name','Filtered Corner');
 pos   = SinglePointCorners;
 color = {'yellow'};
 markedImage = insertMarker(img,pos,'x','color',color,'size',2);
 imshow(markedImage);
-title('\fontsize{10}{\color{magenta}SinglePointCorners}');
+title('\fontsize{10}{\color{magenta} Filtered Corner: Taking max intensity corner in neighbourhood window 7 pixel}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
-colorbar();toc;
-
+impixelinfo;
+toc;
 %%
+
 % X-Dervative
 figure('name','X-Derivative');
 imshow(Ix);

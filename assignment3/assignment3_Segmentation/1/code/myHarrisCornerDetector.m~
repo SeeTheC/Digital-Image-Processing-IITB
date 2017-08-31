@@ -1,4 +1,4 @@
-function [blurImg,cornerImg,corners,Ix,Iy ] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k)
+function [blurImg,cornerImg,corners,maxCorners,Ix,Iy ] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k)
 %   Corner detection
     [row,col]=size(img);
     %
@@ -16,12 +16,12 @@ function [blurImg,cornerImg,corners,Ix,Iy ] = myHarrisCornerDetector(img,windowS
     paddedIy=getPaddedImg(Iy,windowSize);  
     corners=[];
     maxCorners=[];
-    threshold=0.05;
+    minThreshold=0.01;
     % Guassian mask for A
     %W=fspecial('gaussian',[windowSize windowSize],sigma);  
     mask=distance2DMask([windowSize windowSize]);
     W=gaussianMask(mask,sigma);
-    thershDist=6;%
+    thershDist=7;% n Pixel
     for i=4:row-4
         imgX=i+halfWinSize;
         for j=4:col-4
@@ -29,35 +29,43 @@ function [blurImg,cornerImg,corners,Ix,Iy ] = myHarrisCornerDetector(img,windowS
             x1=imgX-halfWinSize;x2=imgX+halfWinSize;
             y1=imgY-halfWinSize;y2=imgY+halfWinSize;
             %fprintf('i=%d j=%d x1=%d x2=%d y1=%d y2=%d\n',i,j,x1,x2,y1,y2);
-            out(i,j)=harrisCornnerDetector(paddedIx(x1:x2,y1:y2),paddedIy(x1:x2,y1:y2),W,k);
-            if out(i,j)>threshold
-                corners=[corners;i,j];
-                maxCorners=axSpecificCorner([i,j],maxCorners,out,thershDist);
+            val=harrisCornnerDetector(paddedIx(x1:x2,y1:y2),paddedIy(x1:x2,y1:y2),W,k);
+            if val>minThreshold
+                out(i,j)=val
+                corners=[corners;j,i];
+                maxCorners=filterNearByCorner([i,j],maxCorners,out,thershDist);
             end
         end
     end           
     cornerImg=out;    
 end
 
-function maxCor=maxSpecificCorner(p,corners,img,thershDist)
-    x=p(1);y=p(y);
+% This will filter the nearby corner i.e within the thershold distance it
+% will take the high intensity  
+function maxCor=filterNearByCorner(p,corners,img,thersholdDist)
+    x=p(1);y=p(2);
     [row,col]=size(corners);
     maxInt=img(x,y);
-    index=-1;
-    maxCor=corners;
+    maxCor=corners;    
+    toInsert=1;
     for i=1:row
-        x1=maxCor(i,1);y1=maxCor(i,1);
+        x1=maxCor(i,2);y1=maxCor(i,1);
         int=img(x1,y1);
         dist=sqrt( (x-x1)^2 + (y-y1)^2 );
-        if(dist<thershDist)
+        if(dist<thersholdDist)
+            toInsert=0;    
             if(int<maxInt)
-               maxCor(index,:)=[x,y];               
+               maxCor(i,:)=[y,x];               
                break;
             end
         else
-            maxCor=[x,y;maxCor];         
-            break;
+            if(x-x1>thersholdDist)
+                break;
+            end
         end
+    end
+    if (toInsert)
+        maxCor=[y,x;maxCor];
     end
 end
 % dim should be Odd then we will able center
