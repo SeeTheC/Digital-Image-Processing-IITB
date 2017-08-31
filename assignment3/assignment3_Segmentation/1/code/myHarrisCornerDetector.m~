@@ -1,4 +1,4 @@
-function [blurImg,cornerImg,corners,maxCorners,Ix,Iy ] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k)
+function [blurImg,cornerImg,corners,Ix,Iy ] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k)
 %   Corner detection
     [row,col]=size(img);
     %
@@ -16,12 +16,12 @@ function [blurImg,cornerImg,corners,maxCorners,Ix,Iy ] = myHarrisCornerDetector(
     paddedIy=getPaddedImg(Iy,windowSize);  
     corners=[];
     maxCorners=[];
-    threshold=0.001;
+    threshold=0.05;
     % Guassian mask for A
     %W=fspecial('gaussian',[windowSize windowSize],sigma);  
     mask=distance2DMask([windowSize windowSize]);
     W=gaussianMask(mask,sigma);
-    thershDist=15;% n Pixel
+    thershDist=6;%
     for i=4:row-4
         imgX=i+halfWinSize;
         for j=4:col-4
@@ -32,7 +32,7 @@ function [blurImg,cornerImg,corners,maxCorners,Ix,Iy ] = myHarrisCornerDetector(
             out(i,j)=harrisCornnerDetector(paddedIx(x1:x2,y1:y2),paddedIy(x1:x2,y1:y2),W,k);
             if out(i,j)>threshold
                 corners=[corners;i,j];
-                maxCorners=maxSpecificCorner([i,j],maxCorners,out,thershDist);
+                maxCorners=axSpecificCorner([i,j],maxCorners,out,thershDist);
             end
         end
     end           
@@ -40,27 +40,24 @@ function [blurImg,cornerImg,corners,maxCorners,Ix,Iy ] = myHarrisCornerDetector(
 end
 
 function maxCor=maxSpecificCorner(p,corners,img,thershDist)
-    x=p(1);y=p(2);
+    x=p(1);y=p(y);
     [row,col]=size(corners);
     maxInt=img(x,y);
-    maxCor=corners;    
-    toInsert=1;
+    index=-1;
+    maxCor=corners;
     for i=1:row
-        x1=maxCor(i,1);y1=maxCor(i,2);
+        x1=maxCor(i,1);y1=maxCor(i,1);
         int=img(x1,y1);
         dist=sqrt( (x-x1)^2 + (y-y1)^2 );
         if(dist<thershDist)
-            toInsert=0;    
             if(int<maxInt)
-               maxCor(i,:)=[x,y];               
+               maxCor(index,:)=[x,y];               
                break;
             end
-        else                    
+        else
+            maxCor=[x,y;maxCor];         
             break;
         end
-    end
-    if (toInsert)
-        maxCor=[x,y;maxCor];
     end
 end
 % dim should be Odd then we will able center

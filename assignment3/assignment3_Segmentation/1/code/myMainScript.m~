@@ -20,11 +20,11 @@ toc;
 %plot(100,100,'r.','MarkerSize',20)
 
 %% Harris corner detector
-windowSize=5;
-sigma=1.3;
+windowSize=7;
+sigma=2;
 blurSigma=0.01;
-k=0.22;
-[blurImg,cornernessMeasure,corners,SinglePointCorners,Ix,Iy] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k);
+k=0.08;
+[blurImg,cornernessMeasure,corners,Ix,Iy] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k);
 
 % Guassian Blur Img
 figure('name','Blur Img');
@@ -40,7 +40,7 @@ toc;
 % Corner-ness Measure 
 figure('name','Corner-ness Measure');
 colormap(gray);
-imshow(cornernessMeasure);
+imshow(cornernessMeasure,colormap(gray(0.3)));
 title('\fontsize{10}{\color{magenta}Corner-ness Measure}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
@@ -49,13 +49,26 @@ impixelinfo;
 toc;
 
 
-fprintf('Number of Corners:%d Single Piont\n',numel(corners),numel(SinglePointCorners));
-%%
+
+% Corner-ness Measure 
+figure('name','Corner-ness Measure 222');
+colormap(gray);
+imshow( cornernessMeasure,colormap(gray(0.3)));
+title('\fontsize{10}{\color{magenta}Corner-ness Measure}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+impixelinfo;
+toc;
+
+
+fprintf('Number of Corners:%d\n',numel(corners));
+
 % Marks the Points
 figure('name','Corner Marked Image');
 pos   = corners;
 color = {'red'};
-markedImage = insertMarker(img,pos,'x','color',color,'size',2);
+markedImage = insertMarker(img,pos,'x','color',color,'size',5);
 imshow(markedImage);
 title('\fontsize{10}{\color{magenta}Corner Marked Image}');
 axis tight,axis on;
@@ -63,18 +76,6 @@ o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
 colorbar();toc;
 
-
-% Marks the Points
-figure('name','SinglePointCorners');
-pos   = SinglePointCorners;
-color = {'yellow'};
-markedImage = insertMarker(img,pos,'x','color',color,'size',2);
-imshow(markedImage);
-title('\fontsize{10}{\color{magenta}SinglePointCorners}');
-axis tight,axis on;
-o1 = get(gca, 'Position');
-set(gca, 'Position', o1);
-colorbar();toc;
 
 %%
 % X-Dervative
