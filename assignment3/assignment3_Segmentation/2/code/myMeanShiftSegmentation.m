@@ -1,4 +1,4 @@
-function outImg = myMeanShiftSegmentation(img,iteration,hBandwidth,hDistance)
+function outImg = myMeanShiftSegmentation(img,iteration,hRGB,hDistance)
     [row,col,k]=size(img);
     out=zeros(row,col,k);
     % coordinateMtx
@@ -8,7 +8,7 @@ function outImg = myMeanShiftSegmentation(img,iteration,hBandwidth,hDistance)
         for i=1:1:row
             for j=1:1:col
                 val=img(i,j,:);
-                meanshift=GaussianFilterVal1(img,[i j],cMtx,hBandwidth,hDistance);
+                meanshift=meanShiftSeg(img,[i j],cMtx,hRGB,hDistance);
                 newval=val+(t*meanshift);                
                 out(i,j,:)=newval;
             end
@@ -19,14 +19,8 @@ function outImg = myMeanShiftSegmentation(img,iteration,hBandwidth,hDistance)
     outImg=out;
 end
 
-% Returns the (x,y) coordinate in as 2 Page mtx. Where 1st page is rows 
-%and 2nd is col 
-function mtx=coordinateMtx(row,col)
-    [r,c]=ndgrid(1:row, 1:col);
-    mtx(:,:,1)=r;
-    mtx(:,:,2)=c;   
-end
-function shift=GaussianFilterVal1(img,point,cMtx,hBandwidth,hDistance)
+% Calculating the mean shift for the pixel
+function shift=meanShiftSeg(img,point,cMtx,hBandwidth,hDistance)
     x=point(1);y=point(2);    
     ip=img(x,y,:);
     coordinate(1,1,1)=x;coordinate(1,1,2)=y;    
@@ -56,19 +50,12 @@ function shift=GaussianFilterVal1(img,point,cMtx,hBandwidth,hDistance)
     
 end
 
-function shift=GaussianFilterVal(img,point,hBandwidth)
-    x=point(1);y=point(2);    
-    %[x1,y1,x2,y2]=getWindowCoordinate(windowSize,point,[row,col]);
-    ip=img(x,y);
-    %imgWindow=img(x1:x2,y1:y2);
-    
-    % Finding G(|Ii-Ip|) exponent value
-    intensityDiff=img-ip;
-    intensityDiffSq=intensityDiff.^2;
-    gDistance=gaussianMask(intensityDiffSq,hBandwidth);
-    gaussianWt=gDistance.*img;
-    mean=sum(sum(gaussianWt))/sum(sum(gDistance));
-    shift=mean-ip;        
+% Returns the (x,y) coordinate in as 2 Page mtx. Where 1st page is rows 
+% and 2nd is col 
+function mtx=coordinateMtx(row,col)
+    [r,c]=ndgrid(1:row, 1:col);
+    mtx(:,:,1)=r;
+    mtx(:,:,2)=c;   
 end
 
 
@@ -80,37 +67,3 @@ function gaussianMask=gaussianMask(x,sigma)
     gaussianMask = amplitude .* exp(-exponent);
 end
 
-
-% Return the [x1 y1 x2 y2] coordinate of window with center as centerCoordinate
-function [x1,y1,x2,y2]=getWindowCoordinate(windowSize,centerCoordinate,imageDim)
-    m=imageDim(1);n=imageDim(2);
-    x=centerCoordinate(1);y=centerCoordinate(2);    
-    N=floor((windowSize-1)/2);
-    if(N<0)
-        N=0;
-    end
-    %finding windows coordinate
-    % Note: In matlab indexing start from 1
-    if(x-N<1) %rows
-        x1=1;
-    else
-        x1=x-N;
-    end
-    if(x+N>m) %rows
-        x2=m;
-    else
-        x2=x+N;
-    end
-    
-    if(y-N<1) %col
-        y1=1;
-    else
-        y1=y-N;
-    end
-    if(y+N>n) %col
-        y2=n;
-    else
-        y2=y+N;
-    end
-   
-end
