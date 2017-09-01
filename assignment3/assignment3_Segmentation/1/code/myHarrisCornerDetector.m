@@ -121,4 +121,3 @@ function [paddedImg] = getPaddedImg(img,windowSize)
     paddedImg= [ zeros(row,pad),img,zeros(row,pad)];
     paddedImg= [ zeros(pad,col+(2*pad));paddedImg;zeros(pad,col+(2*pad))];      
 end
-
