@@ -14,7 +14,7 @@ function outImg = myMeanShiftSegmentation(img,iteration,hRGB,hDistance)
             end
         end
         img=out;
-        fprintf('Iteration:%d\n',itter);
+        %fprintf('Iteration:%d\n',itter);
     end
     outImg=out;
 end
@@ -58,7 +58,6 @@ function mtx=coordinateMtx(row,col)
     mtx(:,:,2)=c;   
 end
 
-
 % Finds the Gaussian mask
 function gaussianMask=gaussianMask(x,sigma)    
     exponent=x./(2*sigma^2);   
@@ -66,4 +65,3 @@ function gaussianMask=gaussianMask(x,sigma)
     amplitude=1;
     gaussianMask = amplitude .* exp(-exponent);
 end
-
