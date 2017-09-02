@@ -1,4 +1,4 @@
-function [blurImg,cornerImg,corners,filterCorner,eigenVal1,eigenVal2,Ix,Iy ] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k)
+function [blurImg,cornerImg,corners,filterCorner,Ix,Iy ] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k)
 %   Corner detection
     [row,col]=size(img);
     %
@@ -22,9 +22,7 @@ function [blurImg,cornerImg,corners,filterCorner,eigenVal1,eigenVal2,Ix,Iy ] = m
     %W=fspecial('gaussian',[windowSize windowSize],sigma);  
     mask=distance2DMask([windowSize windowSize]);
     W=gaussianMask(mask,sigma);
-    out=zeros(row,col);
-    eigenVal1=zeros(row,col);
-    eigenVal2=zeros(row,col);    
+    
     for i=4:row-4
         imgX=i+halfWinSize;
         for j=4:col-4
@@ -32,9 +30,7 @@ function [blurImg,cornerImg,corners,filterCorner,eigenVal1,eigenVal2,Ix,Iy ] = m
             x1=imgX-halfWinSize;x2=imgX+halfWinSize;
             y1=imgY-halfWinSize;y2=imgY+halfWinSize;
             %fprintf('i=%d j=%d x1=%d x2=%d y1=%d y2=%d\n',i,j,x1,x2,y1,y2);
-            [val,lamda1,lamda2]=harrisCornnerDetector(paddedIx(x1:x2,y1:y2),paddedIy(x1:x2,y1:y2),W,k);
-            eigenVal1(i,j)=lamda1;
-            eigenVal2(i,j)=lamda2;
+            [val=harrisCornnerDetector(paddedIx(x1:x2,y1:y2),paddedIy(x1:x2,y1:y2),W,k);
             if val>minThreshold
                 out(i,j)=val;
                 corners=[corners;j,i];

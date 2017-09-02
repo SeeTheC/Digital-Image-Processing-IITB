@@ -61,7 +61,7 @@ windowSize=7;
 sigma=1.3;
 blurSigma=0.01;
 k=0.16;
-[smoothImg,cornernessMeasure,corners,filteredCorners,Ix,Iy] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k);
+[smoothImg,cornernessMeasure,corners,filteredCorners,eigenVal1,eigenVal2,Ix,Iy] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k);
 toc
 %% Smoothing of Image
 figure('name','Smooth Image');
@@ -87,16 +87,48 @@ title('\fontsize{10}{\color{red}Y-Derivative}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
+%% Eigen value Image
+% This shows the eigen values of the two image.
 
-%% Corner-ness Measure 
-figure('name','Corner-ness Measure');
+figure('name','Eigen value');
 colormap(gray);
-imshow(cornernessMeasure>0);
-title('\fontsize{10}{\color{magenta}Corner-ness Measure}');
+subplot(121);
+imshow(eigenVal1);
+title('\fontsize{10}{\color{magenta}Eigen value 1}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
-%fprintf('Number of Corners:%d Single Piont\n',numel(corners),numel(SinglePointCorners));
+
+colormap(gray);
+subplot(122);
+imshow(eigenVal2);
+title('\fontsize{10}{\color{magenta}Eigen value 2}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+
+%% Corner-ness Measure 
+% For better Visualization in cornerness image making all intensity values of greater than zero as 1 so that it is visible in 
+% image because all values greater than 0 are corners. By this we are
+% making the Black and White Image. White Pixel shows the corner the image.
+
+figure('name','Corner-ness Measure');
+colormap(gray);
+subplot(121);
+imshow(cornernessMeasure);
+title('\fontsize{10}{\color{red}Corner-ness Measure with real value}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+colormap(gray);
+subplot(122);
+imshow(cornernessMeasure>0);
+title('\fontsize{10}{\color{magenta}Corner-ness Measure - Black and White (for better Visualization)}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+set(gca, 'Position', o1);
 
 %% Mark the All corners
 % Marks all the corner given by harris corner detection algo.
@@ -106,16 +138,15 @@ pos   = corners;
 color = {'red'};
 markedImage = insertMarker(img,pos,'x','color',color,'size',2);
 imshow(markedImage);
-title('\fontsize{10}{\color{magenta}Corner Marked Image}');
+title('\fontsize{10}{\color{red}Corner Marked Image}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
 
-
 %% Mark the Filtered Corners
-
 % It selects a maximum intesity point from a given cluster of points. Gives
 % better corner. Radius of the cluster considered is 7.
+
 figure('name','Filtered Corner');
 pos   = filteredCorners;
 color = {'yellow'};
