@@ -1,4 +1,4 @@
-function [allImageMean,eigFace,efaceNormalized,allImageDeviation]=eigenFace(imgMatrix)
+function [allImageMean,efaceNormalized,allImageDeviation]=eigenFace(imgMatrix)
     % Computing allImageMean = (1/P)*sum(imgMatrix j's)    (j = 1 : P)
     allImageMean=mean(imgMatrix,2); % allImageMean=M*N x 1
     % Computing the deviation  X=M*N x P

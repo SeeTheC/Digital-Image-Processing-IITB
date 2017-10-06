@@ -31,12 +31,12 @@ function [trainImgCell,testImgCell]=readDB(dirpath,dimension,numOfPerson,trainSi
             
             imgDirPerPerson=strcat(dirpath,'/',folderName);
             imgFilesPerPerson = dir(imgDirPerPerson);
-            imgFilesPerPerson=natsortfiles({imgFilesPerPerson.name});     
+            %imgFilesPerPerson=natsortfiles({imgFilesPerPerson.name});     
             perPersonCount=1;
             %fprintf('-----------[%s]-------------\n',folderName);
             for j = 1:numel(imgFilesPerPerson)
-                    fileName=imgFilesPerPerson(j);fileName=fileName{1};
-                    %fileName=imgFilesPerPerson(j).name;
+                    %fileName=imgFilesPerPerson(j);fileName=fileName{1};
+                    fileName=imgFilesPerPerson(j).name;
                     if ( strcmp(fileName,'.') || strcmp(fileName,'..'))
                         continue;
                     end 

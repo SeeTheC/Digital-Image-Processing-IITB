@@ -1,7 +1,6 @@
-function recognitionRate = imageRecognition(eigFace,xMean,devTrainCell,testCell)
+function recognitionRate = imageRecognition(eigFace,xMean,devTrainCell,testCell,ks)
     recognitionRate={};
-    %Tries to recognise the test image with K eigen Values  
-    ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 150, 170];    
+    %Tries to recognise the test image with K eigen Values    
     devTestSet=bsxfun(@minus, testCell{1}, xMean);
     successRate=zeros(1,numel(ks));    
     for i=1:numel(ks)        
