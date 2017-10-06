@@ -58,7 +58,7 @@ colorbar(),set(gca, 'Position', o1);
 %
 % * Number of iteration: 5
 % * Sigma RGB = 0.12
-% * Sigma Space = 1.5
+% * Sigma Space = 1.4
 %
 %% Output 
 %

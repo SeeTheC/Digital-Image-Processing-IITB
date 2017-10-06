@@ -55,8 +55,10 @@ function [val,lamda1,lamda2]=harrisCornnerDetector(Ix,Iy,W,K)
     % structure tensor
     A = [sumIxSq, sumIxIy; sumIxIy, sumIySq];
     corner_ness =  det(A) - K* (trace(A)^2);
-    val=corner_ness;
     % corner_ness > 0 then its a corner
+    val=corner_ness;
+    
+    % Finding Eigen values of the Tensor Matrix
     [V,D]=eig(A);
     lamda1=D(1,1);lamda2=D(2,2);
 end

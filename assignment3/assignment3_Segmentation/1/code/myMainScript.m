@@ -1,5 +1,5 @@
 %% Assignment 3 -- Question 1
-% CS-663 Group-16305R011,163059009,16305R006
+% CS-663 Group-163059009,16305R011,16305R006
 %% Initialization
 % Initialize the boat image.Then rescale the intensities in the image to
 % lie within the range [0, 1].
@@ -130,7 +130,7 @@ axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
 
-%% Mark the All corners
+%% Mark All corners
 % Marks all the corner given by harris corner detection algo.
 
 figure('name','Corner Marked Image');
@@ -143,16 +143,16 @@ axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
 
-%% Mark the Filtered Corners
+%% Mark Corners by "Non Maximum Suppression"
 % It selects a maximum intesity point from a given cluster of points. Gives
 % better corner. Radius of the cluster considered is 7.
 
-figure('name','Filtered Corner');
+figure('name','Non Maximum Suppression');
 pos   = filteredCorners;
 color = {'yellow'};
 markedImage = insertMarker(img,pos,'x','color',color,'size',2);
 imshow(markedImage);
-title('\fontsize{10}{\color{magenta} Filtered Corner: Taking max intensity corner in neighbourhood window 7 pixel}');
+title('\fontsize{10}{\color{magenta} Non Maximum Suppression: Taking max intensity corner in neighbourhood window 7 pixel}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);

@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Assignment 3 -- Question 1</h1><!--introduction--><p>CS-663 Group-16305R011,163059009,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialization</a></li><li><a href="#2">Original image</a></li><li><a href="#3">Harris corner detector</a></li><li><a href="#5">Parameters</a></li><li><a href="#6">Output:</a></li><li><a href="#7">Harris Corner Detector</a></li><li><a href="#8">Smoothing of Image</a></li><li><a href="#9">X-Dervative</a></li><li><a href="#10">Y-Derivative</a></li><li><a href="#11">Eigen value Image</a></li><li><a href="#12">Corner-ness Measure</a></li><li><a href="#13">Mark the All corners</a></li><li><a href="#14">Mark the Filtered Corners</a></li></ul></div><h2>Initialization<a name="1"></a></h2><p>Initialize the boat image.Then rescale the intensities in the image to lie within the range [0, 1].</p><pre class="codeinput">file=<span class="string">'../data/boat.mat'</span>;
+  </style></head><body><div class="content"><h1>Assignment 3 -- Question 1</h1><!--introduction--><p>CS-663 Group-163059009,16305R011,16305R006</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialization</a></li><li><a href="#2">Original image</a></li><li><a href="#3">Harris corner detector</a></li><li><a href="#5">Parameters</a></li><li><a href="#6">Output:</a></li><li><a href="#7">Harris Corner Detector</a></li><li><a href="#8">Smoothing of Image</a></li><li><a href="#9">X-Dervative</a></li><li><a href="#10">Y-Derivative</a></li><li><a href="#11">Eigen value Image</a></li><li><a href="#12">Corner-ness Measure</a></li><li><a href="#13">Mark All corners</a></li><li><a href="#14">Mark Corners by "Non Maximum Suppression"</a></li></ul></div><h2>Initialization<a name="1"></a></h2><p>Initialize the boat image.Then rescale the intensities in the image to lie within the range [0, 1].</p><pre class="codeinput">file=<span class="string">'../data/boat.mat'</span>;
 l = load(file);
 img1=l.imageOrig;
 img1=img1./255;
@@ -86,7 +86,7 @@ blurSigma=0.01;
 k=0.16;
 [smoothImg,cornernessMeasure,corners,filteredCorners,eigenVal1,eigenVal2,Ix,Iy] = myHarrisCornerDetector(img,windowSize,blurSigma,sigma,k);
 toc
-</pre><pre class="codeoutput">Elapsed time is 10.753943 seconds.
+</pre><pre class="codeoutput">Elapsed time is 10.089673 seconds.
 </pre><h2>Smoothing of Image<a name="8"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Smooth Image'</span>);
 colormap(gray);
 imshow(smoothImg);
@@ -138,7 +138,7 @@ title(<span class="string">'\fontsize{10}{\color{magenta}Corner-ness Measure - B
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 set(gca, <span class="string">'Position'</span>, o1);
-</pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <h2>Mark the All corners<a name="13"></a></h2><p>Marks all the corner given by harris corner detection algo.</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Corner Marked Image'</span>);
+</pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <h2>Mark All corners<a name="13"></a></h2><p>Marks all the corner given by harris corner detection algo.</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Corner Marked Image'</span>);
 pos   = corners;
 color = {<span class="string">'red'</span>};
 markedImage = insertMarker(img,pos,<span class="string">'x'</span>,<span class="string">'color'</span>,color,<span class="string">'size'</span>,2);
@@ -147,19 +147,19 @@ title(<span class="string">'\fontsize{10}{\color{red}Corner Marked Image}'</span
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 set(gca, <span class="string">'Position'</span>, o1);
-</pre><img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <h2>Mark the Filtered Corners<a name="14"></a></h2><p>It selects a maximum intesity point from a given cluster of points. Gives better corner. Radius of the cluster considered is 7.</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Filtered Corner'</span>);
+</pre><img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <h2>Mark Corners by "Non Maximum Suppression"<a name="14"></a></h2><p>It selects a maximum intesity point from a given cluster of points. Gives better corner. Radius of the cluster considered is 7.</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Non Maximum Suppression'</span>);
 pos   = filteredCorners;
 color = {<span class="string">'yellow'</span>};
 markedImage = insertMarker(img,pos,<span class="string">'x'</span>,<span class="string">'color'</span>,color,<span class="string">'size'</span>,2);
 imshow(markedImage);
-title(<span class="string">'\fontsize{10}{\color{magenta} Filtered Corner: Taking max intensity corner in neighbourhood window 7 pixel}'</span>);
+title(<span class="string">'\fontsize{10}{\color{magenta} Non Maximum Suppression: Taking max intensity corner in neighbourhood window 7 pixel}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 o1 = get(gca, <span class="string">'Position'</span>);
 set(gca, <span class="string">'Position'</span>, o1);
 </pre><img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Assignment 3 REPLACE_WITH_DASH_DASH Question 1
-% CS-663 Group-16305R011,163059009,16305R006
+% CS-663 Group-163059009,16305R011,16305R006
 %% Initialization
 % Initialize the boat image.Then rescale the intensities in the image to
 % lie within the range [0, 1].
@@ -290,7 +290,7 @@ axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
 
-%% Mark the All corners
+%% Mark All corners
 % Marks all the corner given by harris corner detection algo.
 
 figure('name','Corner Marked Image');
@@ -303,16 +303,16 @@ axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
 
-%% Mark the Filtered Corners
+%% Mark Corners by "Non Maximum Suppression"
 % It selects a maximum intesity point from a given cluster of points. Gives
 % better corner. Radius of the cluster considered is 7.
 
-figure('name','Filtered Corner');
+figure('name','Non Maximum Suppression');
 pos   = filteredCorners;
 color = {'yellow'};
 markedImage = insertMarker(img,pos,'x','color',color,'size',2);
 imshow(markedImage);
-title('\fontsize{10}{\color{magenta} Filtered Corner: Taking max intensity corner in neighbourhood window 7 pixel}');
+title('\fontsize{10}{\color{magenta} Non Maximum Suppression: Taking max intensity corner in neighbourhood window 7 pixel}');
 axis tight,axis on;
 o1 = get(gca, 'Position');
 set(gca, 'Position', o1);
