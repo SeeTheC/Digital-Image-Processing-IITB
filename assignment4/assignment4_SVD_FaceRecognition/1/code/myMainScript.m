@@ -1,12 +1,9 @@
 %% Eace recognition using Eigen Faces
 
 tic;
-%% Initialization
+%% Initialization Att Face Datase
 attDirpath='../data/att_faces';
-yaleDirpath='../data/CroppedYale';
 [attrTrainImgCell,attrTestImgCell]=readData(attDirpath,'att_faces');
-[yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,'yale');
-fprintf('Reading of images Done.\n');
 %% 1. Attr_Face DataSet
 %% Finding the EignFace : Attr_Face DataSet
 tic
@@ -33,7 +30,38 @@ plot(x,y,'--gs',...
     'MarkerFaceColor',[0.5,0.5,0.5]);
 title('\fontsize{12}{\color{magenta}Recognition Plot: Attr Face DataSet}');
 
-%% 2. Yale DataSet
+%% 2. Attr_Face DataSet-  Using SVD
+%% Finding the EigenFace : Attr_Face DataSet
+% Finding the Eigen Faces using SVD
+tic
+trainImgCell=attrTrainImgCell;
+testImgCell=attrTestImgCell;
+[xMean,efaceNormalized,devTrainSet]=eigenFaceUsingSVD(trainImgCell{1});
+fprintf('Finding Eigen Faces Using SVD.Done.\n');
+toc
+%% Testing The Probe Image : Attr_Face DataSet
+tic
+ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 150, 170];   
+recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
+fprintf('Recognising Test data.Done.\n');
+toc
+%% Recognition Plot: Attr_Face DataSet
+%Drawing Plot
+figure('name','Recognition Plot: Attr Face DataSet');
+x=recognitionRate{1};
+y=recognitionRate{2};
+plot(x,y,'--gs',...
+    'LineWidth',2,...
+    'MarkerSize',10,...
+    'MarkerEdgeColor','b',...
+    'MarkerFaceColor',[0.5,0.5,0.5]);
+title('\fontsize{12}{\color{magenta}Recognition Plot: Attr Face DataSet}');
+
+%% Initializing: Yale Datase
+yaleDirpath='../data/CroppedYale';
+[yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,'yale');
+fprintf('Reading of images Done.\n');
+%% 3. Yale DataSet
 %% Finding the EignFace : Yale Dateset
 tic
 trainImgCell=yaleTrainImgCell;
@@ -59,7 +87,7 @@ plot(x,y,'--gs',...
     'MarkerFaceColor',[0.5,0.5,0.5]);
 title('\fontsize{12}{\color{magenta}Recognition Plot: Yale DataSet}');
 
-%% 3. Yale DataSet - Handling Illumination Change
+%% 4. Yale DataSet - Handling Illumination Change
 %% Testing The Probe Image : Yale Dateset
 % Removing the Top 3 eign vector for handling illumination change on
 % dataset
