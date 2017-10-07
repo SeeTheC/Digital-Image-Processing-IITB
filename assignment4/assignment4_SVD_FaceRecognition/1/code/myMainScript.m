@@ -2,7 +2,7 @@
 
 tic;
 %% Initialization Att Face Datase
-attDirpath='../data/att_faces';
+attDirpath='../../data/att_faces';
 [attrTrainImgCell,attrTestImgCell]=readData(attDirpath,'att_faces');
 %% 1. Attr_Face DataSet
 %% Finding the EignFace : Attr_Face DataSet
@@ -58,7 +58,7 @@ plot(x,y,'--gs',...
 title('\fontsize{12}{\color{magenta}Recognition Plot: Attr Face DataSet}');
 
 %% Initializing: Yale Datase
-yaleDirpath='../data/CroppedYale';
+yaleDirpath='../../data/CroppedYale';
 [yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,'yale');
 fprintf('Reading of images Done.\n');
 %% 3. Yale DataSet
@@ -66,13 +66,14 @@ fprintf('Reading of images Done.\n');
 tic
 trainImgCell=yaleTrainImgCell;
 testImgCell=yaleTestImgCell;
-[xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
+[xMean,efaceNormalized,devTrainSet]=eigenFaceUsingSVD(trainImgCell{1});
+%eigenFaceUsingSVD
 fprintf('Finding Eigen Faces.Done.\n');
 toc
 %% Testing The Probe Image : Yale Dateset
 tic
 ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 60, 65, 75, 100, 200, 300, 500, 1000];
-recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
+recognitionRate=imageRecognition(efaceNormalized1,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
 fprintf('Recognising Test data.Done.\n');
 toc
 %% Recognition Plot: Yale Dateset
@@ -128,7 +129,7 @@ colormap(gray);
 imagesc(rv);
 %}
 %% TEST CODE: DONOT DELETE
-%{
+person=3;ts=40;tts=20;row=192;col=168;
 figure
 testEigFace=efaceNormalized(:,40);
 eigFaceImage = reshape(testEigFace,row,col);
@@ -136,4 +137,3 @@ colormap(gray);
 imagesc(eigFaceImage);
 colorbar;
 toc;
-%}
