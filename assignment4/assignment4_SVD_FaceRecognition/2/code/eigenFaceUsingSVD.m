@@ -3,14 +3,11 @@ function [allImageMean,efaceNormalized,allImageDeviation]=eigenFaceUsingSVD(imgM
     allImageMean=mean(imgMatrix,2); % allImageMean=M*N x 1
     % Computing the deviation  X=M*N x P
     allImageDeviation=bsxfun(@minus, imgMatrix, allImageMean);     
-    L = allImageDeviation'*allImageDeviation;
-    %V is eigen Vectors D is eigen Values A*V = V*D. Eigs: It will give the highest n-1 eigen value in sorted order        
-    [U,S,V] = svd(L);   
+    [U,S,V] = svd(allImageDeviation,'econ');       
     %Eigen Face
     [sorted,order]=sort(diag(S),'descend');
-    U=U(:,order(1:end-1));
-    eigFace=allImageDeviation * U; 
-    
+    U=U(:,order(1:end-1));%last eigen value is zero, so removing it
+    eigFace=U;
     efaceSq=eigFace.^2;
     efaceDis=sum(efaceSq).^0.5;
     efaceNormalized= bsxfun(@times, eigFace, 1./efaceDis);      

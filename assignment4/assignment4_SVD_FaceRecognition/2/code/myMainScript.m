@@ -1,6 +1,5 @@
 %% Eigen Faces
 
-tic;
 %% Initializing: Yale Datase
 yaleDirpath='../../data/CroppedYale';
 [yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,'yale');
