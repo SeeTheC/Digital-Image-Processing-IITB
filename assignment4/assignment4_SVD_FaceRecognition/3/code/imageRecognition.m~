@@ -5,17 +5,12 @@ function recognitionRate = imageRecognition(eigFace,xMean,devTrainCell,testCell,
     successRate=zeros(1,numel(ks));
     falsePositiveCount=zeros(1,numel(ks));
     falseNegativeCount=zeros(1,numel(ks));
-    n=size(devTestSet,2);
     for i=1:numel(ks)        
-        [successRate(i),correctRecognition,imageNotInDBPred,falsePositiveCount(i),falseNegativeCount(i),predLabels]=recognise(eigFace,ks(i),thershold(i,:),devTrainCell,{devTestSet,testCell{2}});
-        fprintf('K=%d\tRecognition-Rate:%f\t Correctly_Recognised=%d\tFalse_Positive:%d\tFalse_Negative:%d\n',ks(i),successRate(i),correctRecognition,falsePositiveCount(i),falseNegativeCount(i));                      
-        falsePositiveCount(i)=falsePositiveCount(i)/n;
-        falseNegativeCount(i)=falseNegativeCount(i)/n;
+        [successRate(i),correctRecognition,imageNotInDBPred,falsePositiveCount(i),falseNegativeCount(),predLabels]=recognise(eigFace,ks(i),thershold(i,:),devTrainCell,{devTestSet,testCell{2}});
+        fprintf('K=%d\tRecognition-Rate:%f\t Correctly_Recognised=%d\t Image_Not_In_DB_Pred:%d\tFalse_Positive:%d\tFalse_Negative:%d\n',ks(i),successRate(i),correctRecognition,imageNotInDBPred,falsePositive,falseNegative);                      
     end
     recognitionRate{1}=ks;
-    recognitionRate{2}=successRate;
-    recognitionRate{3}=falseNegativeCount;
-    recognitionRate{4}=falsePositiveCount;
+    recognitionRate{2}=successRate;   
 end
 
 

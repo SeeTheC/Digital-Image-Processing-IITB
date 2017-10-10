@@ -3,3 +3,5 @@
 A= randi(20,7,5);
 %% Find SVD
 [U S V]= MySVD(A);
+%% Verify the result
+U*S*V'

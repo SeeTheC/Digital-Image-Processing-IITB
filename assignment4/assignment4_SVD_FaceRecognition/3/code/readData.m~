@@ -1,22 +1,16 @@
 % Reads the images from the Database and returns the trainImage dataset and
 % test image data set.
-function [trainImgCell,valImgCell,testImgCell]=readData(dirpath,dimension,totalPerson,numOfPerson,trainSize,valSize,testSize)
+function [trainImgCell,testImgCell]=readData(dirpath,dimension,totalPerson,numOfPerson,trainSize,valSize,testSize)
     row=dimension(1);col=dimension(2);
     % Train  martix Init
-    % Total TrainImage: (perPersonTrain*numOfPerson) 
+    % Total TrainImage: (perPersonTrain*trainPerson) 
     noOfTrainImage=(numOfPerson*trainSize);   
     trainImgMatrix=zeros(row*col,noOfTrainImage);
     trainImgLabel=zeros(noOfTrainImage,1);
     
-    % Validate Image
-    % Total TrainImage: (perPersonVal*numOfPerson) 
-    noOfValImage=(numOfPerson*valSize);   
-    valImgMatrix=zeros(row*col,noOfValImage);
-    valImgLabel=zeros(noOfValImage,1);
-    
     % Test  martix Init
-    % Total TestImage: (perPersonTest*numOfPerson) + (10*totalPerson)
-    % i.e (4*32) + (10*8) 
+    % Total TestImage: (perrPersonTest*trainPerson) + (10*totalPerson)
+    % i.e (4*32) + (10*8)
     noOfTestImage=(numOfPerson*testSize) + (10*(totalPerson-numOfPerson));
     testImgMatrix=zeros(row*col,noOfTestImage);   
     testImgLabel=zeros(noOfTestImage,1);
@@ -55,12 +49,8 @@ function [trainImgCell,valImgCell,testImgCell]=readData(dirpath,dimension,totalP
                                 k=(personCount*trainSize)+perPersonCount;
                                 trainImgMatrix(:,k) = vector;
                                 trainImgLabel(k)=personCount+1;
-                            elseif perPersonCount <= trainSize+valSize;
-                                k=(personCount*valSize)+perPersonCount-trainSize;
-                                valImgMatrix(:,k) = vector;
-                                valImgLabel(k)=personCount+1;                            
-                            else                               
-                                k=(personCount*testSize)+perPersonCount-trainSize-valSize;
+                            elseif perPersonCount <= trainSize
+                                k=(personCount*testSize)+perPersonCount-trainSize;
                                 testImgMatrix(:,k) = vector;
                                 testImgLabel(k)=personCount+1;
                             end
@@ -74,7 +64,6 @@ function [trainImgCell,valImgCell,testImgCell]=readData(dirpath,dimension,totalP
             personCount=personCount+1;
     end 
     trainImgCell={trainImgMatrix,trainImgLabel};
-    valImgCell={valImgMatrix,valImgLabel};    
     testImgCell={testImgMatrix,testImgLabel};
     
 end

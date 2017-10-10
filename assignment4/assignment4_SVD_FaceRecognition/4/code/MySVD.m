@@ -26,7 +26,9 @@ function [ U S V ] = MySVD( A )
     % Eigen Vector can be of inverted sign
     SignChange=sign(diag(U'*A*V));
     for i=1:numel(SignChange)
-        U(:,i)=U(:,i)*SignChange(i);        
+        if(SignChange(i)==-1)
+            U(:,i)=U(:,i)*SignChange(i); 
+        end
     end
 end
 

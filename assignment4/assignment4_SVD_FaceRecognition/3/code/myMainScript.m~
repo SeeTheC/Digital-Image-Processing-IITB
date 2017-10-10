@@ -5,19 +5,20 @@
 %% 1. Calibration of the Thershold
 % We are finding thershold specific to the Label i.e Person in the dataset
 % by divinding the train data into two parts.
+
+%%
 % 
-% * Train Set of Size: 4*32 = 128
-% * Validate Set of Size: 2*32 = 64
+% * ITEM1
+% * ITEM2
 % 
 
-%% Global Constant
-attDirpath='../../data/att_faces';
-dim=[112,92];
 %% Initialization Att Face Datase
 % Validate images will be used for caliberating the Thresholde value
+attDirpath='../../data/att_faces';
+dim=[112,92];
 totalPerson=40;trainPerson=32;
 % Only for intial 1st to 32nd persons
-perPersonTrain=4; perPersonVal=2; perPersonTest=4; 
+perPersonTrain=6; perPersonVal=0; perPersonTest=4; 
 
 [attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);    
 
@@ -49,23 +50,12 @@ toc
 figure('name','Recognition Plot: Validatation Set');
 x=recognitionRate{1};
 y=recognitionRate{2};
-plot(x,y);
-xlabel('K');ylabel('Rate');
-title('\fontsize{12}{\color{magenta}Recognition Plot: Validatation Set}');
-
-%% 2. Testing on Testing data
-
-%% Initialization Att Face Datase
-totalPerson=40;trainPerson=32;
-perPersonTrain=6; perPersonVal=0; perPersonTest=4; 
-[attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);    
-% Finding the EignFace
-tic
-trainImgCell=attrTrainImgCell;
-[xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
-fprintf('Finding Eigen Faces.Done.\n');
-toc
-
+plot(x,y,'--gs',...
+    'LineWidth',2,...
+    'MarkerSize',10,...
+    'MarkerEdgeColor','b',...
+    'MarkerFaceColor',[0.5,0.5,0.5]);
+title('\fontsize{12}{\color{magenta}Recognition Plot: Validatation Set');
 
 %% Testing on Test data
 tic
@@ -84,26 +74,16 @@ toc
 figure('name','Recognition Plot: Test Set');
 x=recognitionRate{1};
 y=recognitionRate{2};
-plot(x,y);
-xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
-title('\fontsize{12}{\color{magenta}Recognition Plot: Test Set}');
-
-
-% False Negative
-figure('name','False Negative Plot: Test Set');
-x=recognitionRate{1};
-y=recognitionRate{3};
-plot(x,y);
-xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
-title('\fontsize{12}{\color{magenta}False Negative Plot: Test Set}');
-
-
-% False Positive
-figure('name','False Positive Plot: Test Set');
-x=recognitionRate{1};
-y=recognitionRate{4};
-plot(x,y);
-xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
-title('\fontsize{12}{\color{magenta}False Positive Plot: Test Set}');
+plot(x,y,'--gs',...
+    'LineWidth',2,...
+    'MarkerSize',10,...
+    'MarkerEdgeColor','b',...
+    'MarkerFaceColor',[0.5,0.5,0.5]);
+title('\fontsize{12}{\color{magenta}Recognition Plot: Test Set');
 
 %%
+
+noK=[128];
+for k=1:size(noK,2)
+    disp(k);
+end

@@ -1,0 +1,396 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-10"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Face recognition using Eigen Faces</a></li><li><a href="#2">1. Calibration of the Thershold</a></li><li><a href="#3">Global Constant</a></li><li><a href="#4">Initialization Att Face Datase</a></li><li><a href="#5">Finding the EignFace</a></li><li><a href="#6">Testing The Validate image Image and Caliberation of Threshold</a></li><li><a href="#7">Recognition Plot: For Validatation Set</a></li><li><a href="#8">2. Testing on Testing data</a></li><li><a href="#9">Initialization Att Face Datase</a></li><li><a href="#10">Testing on Test data</a></li><li><a href="#11">Recognition Plot: Attr_Face DataSet</a></li></ul></div><h2>Face recognition using Eigen Faces<a name="1"></a></h2><pre class="codeinput"><span class="comment">%Face recognition using Eigen Faces and also handling thoes faces of person which are</span>
+<span class="comment">%not in the dataset</span>
+</pre><h2>1. Calibration of the Thershold<a name="2"></a></h2><p>We are finding thershold specific to the Label i.e Person in the dataset by divinding the train data into two parts.</p><div><ul><li>Train Set of Size: 4*32 = 128</li><li>Validate Set of Size: 2*32 = 64</li></ul></div><h2>Global Constant<a name="3"></a></h2><pre class="codeinput">attDirpath=<span class="string">'../../data/att_faces'</span>;
+dim=[112,92];
+</pre><h2>Initialization Att Face Datase<a name="4"></a></h2><p>Validate images will be used for caliberating the Thresholde value</p><pre class="codeinput">totalPerson=40;trainPerson=32;
+<span class="comment">% Only for intial 1st to 32nd persons</span>
+perPersonTrain=4; perPersonVal=2; perPersonTest=4;
+
+[attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);
+
+fprintf(<span class="string">'# of Train image 4*32 = 128\n'</span>);
+fprintf(<span class="string">'# of Validate image 2*32 = 64\n'</span>);
+fprintf(<span class="string">'# of Test image 4*32 + 80 = 208\n'</span>);
+</pre><pre class="codeoutput"># of Train image 4*32 = 128
+# of Validate image 2*32 = 64
+# of Test image 4*32 + 80 = 208
+</pre><h2>Finding the EignFace<a name="5"></a></h2><pre class="codeinput">tic
+trainImgCell=attrTrainImgCell;
+[xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
+fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
+
+toc
+</pre><pre class="codeoutput">Finding Eigen Faces.Done.
+Elapsed time is 0.047930 seconds.
+</pre><h2>Testing The Validate image Image and Caliberation of Threshold<a name="6"></a></h2><pre class="codeinput">tic
+testImgCell=attrValImgCell;
+ks=[1:127];
+<span class="comment">%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];</span>
+recognitionRate=therholdCaliberation(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,trainPerson,ks);
+thershold=recognitionRate{3};
+fprintf(<span class="string">'Recognising Validate data and Calibarting Thershold.Done.\n'</span>);
+toc
+</pre><pre class="codeoutput">Recognising Validate data and Calibarting Thershold.Done.
+Elapsed time is 2.283675 seconds.
+</pre><h2>Recognition Plot: For Validatation Set<a name="7"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
+figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Validatation Set'</span>);
+x=recognitionRate{1};
+y=recognitionRate{2};
+plot(x,y);
+xlabel(<span class="string">'K'</span>);ylabel(<span class="string">'Rate'</span>);
+title(<span class="string">'\fontsize{12}{\color{magenta}Recognition Plot: Validatation Set}'</span>);
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>2. Testing on Testing data<a name="8"></a></h2><h2>Initialization Att Face Datase<a name="9"></a></h2><pre class="codeinput">totalPerson=40;trainPerson=32;
+perPersonTrain=6; perPersonVal=0; perPersonTest=4;
+[attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);
+<span class="comment">% Finding the EignFace</span>
+tic
+trainImgCell=attrTrainImgCell;
+[xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
+fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
+toc
+</pre><pre class="codeoutput">Finding Eigen Faces.Done.
+Elapsed time is 0.131217 seconds.
+</pre><h2>Testing on Test data<a name="10"></a></h2><pre class="codeinput">tic
+testImgCell=attrTestImgCell;
+<span class="comment">%t=testImgCell{1};</span>
+<span class="comment">%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];</span>
+<span class="comment">%ks=[1:128];</span>
+<span class="comment">%testImgCell{1}=t(:,1:128);</span>
+recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,thershold,ks);
+fprintf(<span class="string">'Recognising Test data.Done.\n'</span>);
+toc
+</pre><pre class="codeoutput">K=1	Recognition-Rate:0.144231	 Correctly_Recognised=30	False_Positive:178	False_Negative:0
+K=2	Recognition-Rate:0.639423	 Correctly_Recognised=133	False_Positive:40	False_Negative:35
+K=3	Recognition-Rate:0.644231	 Correctly_Recognised=134	False_Positive:31	False_Negative:43
+K=4	Recognition-Rate:0.754808	 Correctly_Recognised=157	False_Positive:8	False_Negative:43
+K=5	Recognition-Rate:0.721154	 Correctly_Recognised=150	False_Positive:19	False_Negative:39
+K=6	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:12	False_Negative:51
+K=7	Recognition-Rate:0.735577	 Correctly_Recognised=153	False_Positive:7	False_Negative:48
+K=8	Recognition-Rate:0.649038	 Correctly_Recognised=135	False_Positive:24	False_Negative:49
+K=9	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:16	False_Negative:49
+K=10	Recognition-Rate:0.644231	 Correctly_Recognised=134	False_Positive:18	False_Negative:56
+K=11	Recognition-Rate:0.653846	 Correctly_Recognised=136	False_Positive:23	False_Negative:49
+K=12	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:21	False_Negative:49
+K=13	Recognition-Rate:0.658654	 Correctly_Recognised=137	False_Positive:23	False_Negative:48
+K=14	Recognition-Rate:0.668269	 Correctly_Recognised=139	False_Positive:23	False_Negative:46
+K=15	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:17	False_Negative:49
+K=16	Recognition-Rate:0.658654	 Correctly_Recognised=137	False_Positive:25	False_Negative:46
+K=17	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:24	False_Negative:42
+K=18	Recognition-Rate:0.677885	 Correctly_Recognised=141	False_Positive:24	False_Negative:43
+K=19	Recognition-Rate:0.653846	 Correctly_Recognised=136	False_Positive:28	False_Negative:44
+K=20	Recognition-Rate:0.668269	 Correctly_Recognised=139	False_Positive:25	False_Negative:44
+K=21	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:27	False_Negative:43
+K=22	Recognition-Rate:0.668269	 Correctly_Recognised=139	False_Positive:26	False_Negative:43
+K=23	Recognition-Rate:0.677885	 Correctly_Recognised=141	False_Positive:24	False_Negative:43
+K=24	Recognition-Rate:0.677885	 Correctly_Recognised=141	False_Positive:23	False_Negative:44
+K=25	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:21	False_Negative:44
+K=26	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:19	False_Negative:45
+K=27	Recognition-Rate:0.677885	 Correctly_Recognised=141	False_Positive:20	False_Negative:47
+K=28	Recognition-Rate:0.668269	 Correctly_Recognised=139	False_Positive:22	False_Negative:47
+K=29	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:20	False_Negative:50
+K=30	Recognition-Rate:0.653846	 Correctly_Recognised=136	False_Positive:24	False_Negative:48
+K=31	Recognition-Rate:0.649038	 Correctly_Recognised=135	False_Positive:25	False_Negative:48
+K=32	Recognition-Rate:0.649038	 Correctly_Recognised=135	False_Positive:25	False_Negative:48
+K=33	Recognition-Rate:0.629808	 Correctly_Recognised=131	False_Positive:25	False_Negative:52
+K=34	Recognition-Rate:0.634615	 Correctly_Recognised=132	False_Positive:24	False_Negative:52
+K=35	Recognition-Rate:0.639423	 Correctly_Recognised=133	False_Positive:24	False_Negative:51
+K=36	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:24	False_Negative:46
+K=37	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:20	False_Negative:45
+K=38	Recognition-Rate:0.677885	 Correctly_Recognised=141	False_Positive:20	False_Negative:47
+K=39	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:13	False_Negative:49
+K=40	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:13	False_Negative:49
+K=41	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:13	False_Negative:52
+K=42	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:13	False_Negative:52
+K=43	Recognition-Rate:0.644231	 Correctly_Recognised=134	False_Positive:23	False_Negative:51
+K=44	Recognition-Rate:0.649038	 Correctly_Recognised=135	False_Positive:23	False_Negative:50
+K=45	Recognition-Rate:0.644231	 Correctly_Recognised=134	False_Positive:24	False_Negative:50
+K=46	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:13	False_Negative:52
+K=47	Recognition-Rate:0.658654	 Correctly_Recognised=137	False_Positive:23	False_Negative:48
+K=48	Recognition-Rate:0.668269	 Correctly_Recognised=139	False_Positive:23	False_Negative:46
+K=49	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:23	False_Negative:47
+K=50	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:23	False_Negative:47
+K=51	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:23	False_Negative:47
+K=52	Recognition-Rate:0.663462	 Correctly_Recognised=138	False_Positive:23	False_Negative:47
+K=53	Recognition-Rate:0.658654	 Correctly_Recognised=137	False_Positive:23	False_Negative:48
+K=54	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:23	False_Negative:43
+K=55	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:23	False_Negative:42
+K=56	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:23	False_Negative:43
+K=57	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:23	False_Negative:43
+K=58	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:23	False_Negative:43
+K=59	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:23	False_Negative:43
+K=60	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:23	False_Negative:42
+K=61	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:23	False_Negative:42
+K=62	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:23	False_Negative:42
+K=63	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:23	False_Negative:42
+K=64	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:24	False_Negative:39
+K=65	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:24	False_Negative:38
+K=66	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:24	False_Negative:38
+K=67	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:24	False_Negative:42
+K=68	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:24	False_Negative:42
+K=69	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:24	False_Negative:41
+K=70	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:23	False_Negative:43
+K=71	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:23	False_Negative:42
+K=72	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:23	False_Negative:41
+K=73	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:24	False_Negative:41
+K=74	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:24	False_Negative:41
+K=75	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:24	False_Negative:41
+K=76	Recognition-Rate:0.711538	 Correctly_Recognised=148	False_Positive:25	False_Negative:35
+K=77	Recognition-Rate:0.706731	 Correctly_Recognised=147	False_Positive:25	False_Negative:36
+K=78	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:26	False_Negative:37
+K=79	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
+K=80	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:24	False_Negative:41
+K=81	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:24	False_Negative:41
+K=82	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:25	False_Negative:37
+K=83	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
+K=84	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
+K=85	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:26	False_Negative:36
+K=86	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:26	False_Negative:37
+K=87	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:26	False_Negative:37
+K=88	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:26	False_Negative:37
+K=89	Recognition-Rate:0.677885	 Correctly_Recognised=141	False_Positive:26	False_Negative:41
+K=90	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:26	False_Negative:37
+K=91	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:26	False_Negative:36
+K=92	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:27	False_Negative:38
+K=93	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:27	False_Negative:36
+K=94	Recognition-Rate:0.697115	 Correctly_Recognised=145	False_Positive:27	False_Negative:36
+K=95	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:26	False_Negative:36
+K=96	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:26	False_Negative:40
+K=97	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:26	False_Negative:39
+K=98	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:27	False_Negative:35
+K=99	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:27	False_Negative:35
+K=100	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:27	False_Negative:35
+K=101	Recognition-Rate:0.706731	 Correctly_Recognised=147	False_Positive:27	False_Negative:34
+K=102	Recognition-Rate:0.706731	 Correctly_Recognised=147	False_Positive:27	False_Negative:34
+K=103	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:27	False_Negative:35
+K=104	Recognition-Rate:0.701923	 Correctly_Recognised=146	False_Positive:27	False_Negative:35
+K=105	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=106	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=107	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=108	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=109	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=110	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=111	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:27	False_Negative:39
+K=112	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:26	False_Negative:39
+K=113	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:26	False_Negative:39
+K=114	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=115	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=116	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=117	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=118	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=119	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=120	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=121	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=122	Recognition-Rate:0.692308	 Correctly_Recognised=144	False_Positive:25	False_Negative:39
+K=123	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:25	False_Negative:40
+K=124	Recognition-Rate:0.687500	 Correctly_Recognised=143	False_Positive:25	False_Negative:40
+K=125	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
+K=126	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
+K=127	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
+Recognising Test data.Done.
+Elapsed time is 5.221683 seconds.
+</pre><h2>Recognition Plot: Attr_Face DataSet<a name="11"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
+figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Test Set'</span>);
+x=recognitionRate{1};
+y=recognitionRate{2};
+plot(x,y);
+xlim([0,128]);xlabel(<span class="string">'K'</span>);ylim([0,1]);ylabel(<span class="string">'Rate'</span>);
+title(<span class="string">'\fontsize{12}{\color{magenta}Recognition Plot: Test Set}'</span>);
+
+
+<span class="comment">% False Negative</span>
+figure(<span class="string">'name'</span>,<span class="string">'False Negative Plot: Test Set'</span>);
+x=recognitionRate{1};
+y=recognitionRate{3};
+plot(x,y);
+xlim([0,128]);xlabel(<span class="string">'K'</span>);ylim([0,1]);ylabel(<span class="string">'Rate'</span>);
+title(<span class="string">'\fontsize{12}{\color{magenta}False Negative Plot: Test Set}'</span>);
+
+
+<span class="comment">% False Positive</span>
+figure(<span class="string">'name'</span>,<span class="string">'False Positive Plot: Test Set'</span>);
+x=recognitionRate{1};
+y=recognitionRate{4};
+plot(x,y);
+xlim([0,128]);xlabel(<span class="string">'K'</span>);ylim([0,1]);ylabel(<span class="string">'Rate'</span>);
+title(<span class="string">'\fontsize{12}{\color{magenta}False Positive Plot: Test Set}'</span>);
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Face recognition using Eigen Faces
+%Face recognition using Eigen Faces and also handling thoes faces of person which are
+%not in the dataset
+
+%% 1. Calibration of the Thershold
+% We are finding thershold specific to the Label i.e Person in the dataset
+% by divinding the train data into two parts.
+% 
+% * Train Set of Size: 4*32 = 128
+% * Validate Set of Size: 2*32 = 64
+% 
+
+%% Global Constant
+attDirpath='../../data/att_faces';
+dim=[112,92];
+%% Initialization Att Face Datase
+% Validate images will be used for caliberating the Thresholde value
+totalPerson=40;trainPerson=32;
+% Only for intial 1st to 32nd persons
+perPersonTrain=4; perPersonVal=2; perPersonTest=4; 
+
+[attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);    
+
+fprintf('# of Train image 4*32 = 128\n');
+fprintf('# of Validate image 2*32 = 64\n');
+fprintf('# of Test image 4*32 + 80 = 208\n');
+
+%% Finding the EignFace
+tic
+trainImgCell=attrTrainImgCell;
+[xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
+fprintf('Finding Eigen Faces.Done.\n');
+
+toc
+
+%% Testing The Validate image Image and Caliberation of Threshold
+tic
+testImgCell=attrValImgCell;
+ks=[1:127];
+%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];
+recognitionRate=therholdCaliberation(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,trainPerson,ks);
+thershold=recognitionRate{3};
+fprintf('Recognising Validate data and Calibarting Thershold.Done.\n');
+toc
+
+
+%% Recognition Plot: For Validatation Set
+%Drawing Plot
+figure('name','Recognition Plot: Validatation Set');
+x=recognitionRate{1};
+y=recognitionRate{2};
+plot(x,y);
+xlabel('K');ylabel('Rate');
+title('\fontsize{12}{\color{magenta}Recognition Plot: Validatation Set}');
+
+%% 2. Testing on Testing data
+
+%% Initialization Att Face Datase
+totalPerson=40;trainPerson=32;
+perPersonTrain=6; perPersonVal=0; perPersonTest=4; 
+[attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);    
+% Finding the EignFace
+tic
+trainImgCell=attrTrainImgCell;
+[xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
+fprintf('Finding Eigen Faces.Done.\n');
+toc
+
+
+%% Testing on Test data
+tic
+testImgCell=attrTestImgCell;
+%t=testImgCell{1};
+%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];
+%ks=[1:128];
+%testImgCell{1}=t(:,1:128);
+recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,thershold,ks);
+fprintf('Recognising Test data.Done.\n');
+toc
+
+
+%% Recognition Plot: Attr_Face DataSet
+%Drawing Plot
+figure('name','Recognition Plot: Test Set');
+x=recognitionRate{1};
+y=recognitionRate{2};
+plot(x,y);
+xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
+title('\fontsize{12}{\color{magenta}Recognition Plot: Test Set}');
+
+
+% False Negative
+figure('name','False Negative Plot: Test Set');
+x=recognitionRate{1};
+y=recognitionRate{3};
+plot(x,y);
+xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
+title('\fontsize{12}{\color{magenta}False Negative Plot: Test Set}');
+
+
+% False Positive
+figure('name','False Positive Plot: Test Set');
+x=recognitionRate{1};
+y=recognitionRate{4};
+plot(x,y);
+xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
+title('\fontsize{12}{\color{magenta}False Positive Plot: Test Set}');
+
+%%
+##### SOURCE END #####
+--></body></html>
