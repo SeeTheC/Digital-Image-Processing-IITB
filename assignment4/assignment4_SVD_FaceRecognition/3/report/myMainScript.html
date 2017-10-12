@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-10"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>Assignment 4--3</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-12"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,11 +66,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Face recognition using Eigen Faces</a></li><li><a href="#2">1. Calibration of the Thershold</a></li><li><a href="#3">Global Constant</a></li><li><a href="#4">Initialization Att Face Datase</a></li><li><a href="#5">Finding the EignFace</a></li><li><a href="#6">Testing The Validate image Image and Caliberation of Threshold</a></li><li><a href="#7">Recognition Plot: For Validatation Set</a></li><li><a href="#8">2. Testing on Testing data</a></li><li><a href="#9">Initialization Att Face Datase</a></li><li><a href="#10">Testing on Test data</a></li><li><a href="#11">Recognition Plot: Attr_Face DataSet</a></li></ul></div><h2>Face recognition using Eigen Faces<a name="1"></a></h2><pre class="codeinput"><span class="comment">%Face recognition using Eigen Faces and also handling thoes faces of person which are</span>
-<span class="comment">%not in the dataset</span>
-</pre><h2>1. Calibration of the Thershold<a name="2"></a></h2><p>We are finding thershold specific to the Label i.e Person in the dataset by divinding the train data into two parts.</p><div><ul><li>Train Set of Size: 4*32 = 128</li><li>Validate Set of Size: 2*32 = 64</li></ul></div><h2>Global Constant<a name="3"></a></h2><pre class="codeinput">attDirpath=<span class="string">'../../data/att_faces'</span>;
+  </style></head><body><div class="content"><h1>Assignment 4--3</h1><!--introduction--><p>CS-663 Group-163059009, 16305R011</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Mechanism used for the face where their is no matching identity is</a></li><li><a href="#4">Face recognition using Eigen Faces</a></li><li><a href="#5">1. Calibration of the Thershold</a></li><li><a href="#6">Global Constant</a></li><li><a href="#7">Initialization Att Face Datase</a></li><li><a href="#8">Finding the EignFace</a></li><li><a href="#9">Testing The Validate image Image and Caliberation of Threshold</a></li><li><a href="#10">Recognition Plot: For Validatation Set</a></li><li><a href="#11">2. Testing on Testing data</a></li><li><a href="#12">Initialization Att Face Datase</a></li><li><a href="#13">Testing on Test data</a></li><li><a href="#14">Recognition Plot: Attr_Face DataSet</a></li><li><a href="#15">Showing threshold values</a></li></ul></div><h2>Mechanism used for the fact there is no matching identity is<a name="1"></a></h2><p>Algo is divided into two parts.</p><div><ol><li>Calibrating threshold</li><li>Testing</li></ol></div><p>In Calibrating part We are finding thershold specific to the Label i.e Person in the dataset by divinding the train data into two parts.There sizes are :</p><div><ul><li>Train Set of Size: 4*32 = 128</li><li>Validate Set of Size: 2*32 = 64</li></ul></div><p>In testing Phase we are recognizing faces and setting the following values :</p><div><ul><li>False Negative</li><li>False Positive</li><li>Recognition rate</li></ul></div><h2>Face recognition using Eigen Faces<a name="4"></a></h2><p>Face recognition using Eigen Faces and also handling thoes faces of person which are not in the dataset</p><h2>1. Calibration of the Thershold<a name="5"></a></h2><p>We are finding thershold specific to the Label i.e Person in the dataset by divinding the train data into two parts.</p><div><ul><li>Train Set of Size: 4*32 = 128</li><li>Validate Set of Size: 2*32 = 64</li></ul></div><h2>Global Constant<a name="6"></a></h2><pre class="codeinput">attDirpath=<span class="string">'../../data/att_faces'</span>;
 dim=[112,92];
-</pre><h2>Initialization Att Face Datase<a name="4"></a></h2><p>Validate images will be used for caliberating the Thresholde value</p><pre class="codeinput">totalPerson=40;trainPerson=32;
+</pre><h2>Initialization Att Face Datase<a name="7"></a></h2><p>Validate images will be used for caliberating the Threshold value</p><pre class="codeinput">totalPerson=40;trainPerson=32;
 <span class="comment">% Only for intial 1st to 32nd persons</span>
 perPersonTrain=4; perPersonVal=2; perPersonTest=4;
 
@@ -82,32 +80,30 @@ fprintf(<span class="string">'# of Test image 4*32 + 80 = 208\n'</span>);
 </pre><pre class="codeoutput"># of Train image 4*32 = 128
 # of Validate image 2*32 = 64
 # of Test image 4*32 + 80 = 208
-</pre><h2>Finding the EignFace<a name="5"></a></h2><pre class="codeinput">tic
+</pre><h2>Finding the EignFace<a name="8"></a></h2><pre class="codeinput">tic
 trainImgCell=attrTrainImgCell;
 [xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
 fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
 
 toc
 </pre><pre class="codeoutput">Finding Eigen Faces.Done.
-Elapsed time is 0.047930 seconds.
-</pre><h2>Testing The Validate image Image and Caliberation of Threshold<a name="6"></a></h2><pre class="codeinput">tic
+Elapsed time is 0.062271 seconds.
+</pre><h2>Testing The Validate image Image and Caliberation of Threshold<a name="9"></a></h2><p>Finding threshold values for every person i.e. 32 person in our db for every k wher k is from 1 to 127. It return  s * threshold values an recognition rate on validation set *</p><pre class="codeinput">tic
 testImgCell=attrValImgCell;
 ks=[1:127];
-<span class="comment">%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];</span>
 recognitionRate=therholdCaliberation(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,trainPerson,ks);
 thershold=recognitionRate{3};
 fprintf(<span class="string">'Recognising Validate data and Calibarting Thershold.Done.\n'</span>);
 toc
 </pre><pre class="codeoutput">Recognising Validate data and Calibarting Thershold.Done.
-Elapsed time is 2.283675 seconds.
-</pre><h2>Recognition Plot: For Validatation Set<a name="7"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
-figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Validatation Set'</span>);
+Elapsed time is 3.218695 seconds.
+</pre><h2>Recognition Plot: For Validatation Set<a name="10"></a></h2><p>Drawing Plot</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Validatation Set'</span>);
 x=recognitionRate{1};
 y=recognitionRate{2};
 plot(x,y);
 xlabel(<span class="string">'K'</span>);ylabel(<span class="string">'Rate'</span>);
 title(<span class="string">'\fontsize{12}{\color{magenta}Recognition Plot: Validatation Set}'</span>);
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>2. Testing on Testing data<a name="8"></a></h2><h2>Initialization Att Face Datase<a name="9"></a></h2><pre class="codeinput">totalPerson=40;trainPerson=32;
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>2. Testing on Testing data<a name="11"></a></h2><h2>Initialization Att Face Datase<a name="12"></a></h2><pre class="codeinput">totalPerson=40;trainPerson=32;
 perPersonTrain=6; perPersonVal=0; perPersonTest=4;
 [attrTrainImgCell,attrValImgCell,attrTestImgCell]=readData(attDirpath,dim,totalPerson,trainPerson,perPersonTrain,perPersonVal,perPersonTest);
 <span class="comment">% Finding the EignFace</span>
@@ -117,13 +113,9 @@ trainImgCell=attrTrainImgCell;
 fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
 toc
 </pre><pre class="codeoutput">Finding Eigen Faces.Done.
-Elapsed time is 0.131217 seconds.
-</pre><h2>Testing on Test data<a name="10"></a></h2><pre class="codeinput">tic
+Elapsed time is 0.121440 seconds.
+</pre><h2>Testing on Test data<a name="13"></a></h2><pre class="codeinput">tic
 testImgCell=attrTestImgCell;
-<span class="comment">%t=testImgCell{1};</span>
-<span class="comment">%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];</span>
-<span class="comment">%ks=[1:128];</span>
-<span class="comment">%testImgCell{1}=t(:,1:128);</span>
 recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,thershold,ks);
 fprintf(<span class="string">'Recognising Test data.Done.\n'</span>);
 toc
@@ -255,9 +247,8 @@ K=125	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	Fals
 K=126	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
 K=127	Recognition-Rate:0.682692	 Correctly_Recognised=142	False_Positive:25	False_Negative:41
 Recognising Test data.Done.
-Elapsed time is 5.221683 seconds.
-</pre><h2>Recognition Plot: Attr_Face DataSet<a name="11"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
-figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Test Set'</span>);
+Elapsed time is 8.275452 seconds.
+</pre><h2>Recognition Plot: Attr_Face DataSet<a name="14"></a></h2><p>Drawing Plot showing result for all values of k</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Test Set'</span>);
 x=recognitionRate{1};
 y=recognitionRate{2};
 plot(x,y);
@@ -281,11 +272,79 @@ y=recognitionRate{4};
 plot(x,y);
 xlim([0,128]);xlabel(<span class="string">'K'</span>);ylim([0,1]);ylabel(<span class="string">'Rate'</span>);
 title(<span class="string">'\fontsize{12}{\color{magenta}False Positive Plot: Test Set}'</span>);
-</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>Showing threshold values<a name="15"></a></h2><p>We are showing 32 threshold values for k = 100</p><pre class="codeinput">k=100;
+<span class="keyword">for</span> i = 1:32
+    fprintf(<span class="string">'Label:%d\tthreshold:%f\n'</span>,i,thershold(k,i));
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Label:1	threshold:3204.709430
+Label:2	threshold:2143.558738
+Label:3	threshold:2913.953414
+Label:4	threshold:2446.573254
+Label:5	threshold:2521.073283
+Label:6	threshold:1737.193785
+Label:7	threshold:2065.062334
+Label:8	threshold:2573.537902
+Label:9	threshold:2268.649620
+Label:10	threshold:2799.787141
+Label:11	threshold:3716.696837
+Label:12	threshold:2399.080345
+Label:13	threshold:1223.617783
+Label:14	threshold:2157.474374
+Label:15	threshold:1252.092926
+Label:16	threshold:4129.174084
+Label:17	threshold:1571.904782
+Label:18	threshold:2342.465433
+Label:19	threshold:2936.533674
+Label:20	threshold:2822.554622
+Label:21	threshold:2010.042805
+Label:22	threshold:2127.246582
+Label:23	threshold:2852.215270
+Label:24	threshold:2372.940593
+Label:25	threshold:-Inf
+Label:26	threshold:2157.095857
+Label:27	threshold:1748.123458
+Label:28	threshold:3388.230024
+Label:29	threshold:2282.344691
+Label:30	threshold:2401.527679
+Label:31	threshold:1783.963211
+Label:32	threshold:2628.398689
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
+%% Assignment 4REPLACE_WITH_DASH_DASH3
+% CS-663
+% Group-163059009, 16305R011
+%% Mechanism used for the fact there is no matching identity is
+% Algo is divided into two parts. 
+
+%%
+% 
+% # Calibrating threshold  
+% # Testing
+% 
+%
+% In Calibrating part
+% We are finding thershold specific to the Label i.e Person in the dataset
+% by divinding the train data into two parts.There sizes are :
+% 
+% * Train Set of Size: 4*32 = 128
+% * Validate Set of Size: 2*32 = 64
+% 
+%
+% In testing Phase we are recognizing faces and setting the following values : 
+%%
+% 
+% * False Negative
+% * False Positive
+% * Recognition rate
+% 
+
+
+
 %% Face recognition using Eigen Faces
-%Face recognition using Eigen Faces and also handling thoes faces of person which are
-%not in the dataset
+% Face recognition using Eigen Faces and also handling thoes faces of person which are
+% not in the dataset
+
+
 
 %% 1. Calibration of the Thershold
 % We are finding thershold specific to the Label i.e Person in the dataset
@@ -299,7 +358,7 @@ title(<span class="string">'\fontsize{12}{\color{magenta}False Positive Plot: Te
 attDirpath='../../data/att_faces';
 dim=[112,92];
 %% Initialization Att Face Datase
-% Validate images will be used for caliberating the Thresholde value
+% Validate images will be used for caliberating the Threshold value
 totalPerson=40;trainPerson=32;
 % Only for intial 1st to 32nd persons
 perPersonTrain=4; perPersonVal=2; perPersonTest=4; 
@@ -319,10 +378,12 @@ fprintf('Finding Eigen Faces.Done.\n');
 toc
 
 %% Testing The Validate image Image and Caliberation of Threshold
+% Finding threshold values for every person i.e. 32 person in our db for
+% every k wher k is from 1 to 127. It return  s * threshold values an recognition rate on validation set *
+
 tic
 testImgCell=attrValImgCell;
 ks=[1:127];
-%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];
 recognitionRate=therholdCaliberation(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,trainPerson,ks);
 thershold=recognitionRate{3};
 fprintf('Recognising Validate data and Calibarting Thershold.Done.\n');
@@ -330,7 +391,7 @@ toc
 
 
 %% Recognition Plot: For Validatation Set
-%Drawing Plot
+% Drawing Plot
 figure('name','Recognition Plot: Validatation Set');
 x=recognitionRate{1};
 y=recognitionRate{2};
@@ -355,17 +416,14 @@ toc
 %% Testing on Test data
 tic
 testImgCell=attrTestImgCell;
-%t=testImgCell{1};
-%ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 120];
-%ks=[1:128];
-%testImgCell{1}=t(:,1:128);
 recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,thershold,ks);
 fprintf('Recognising Test data.Done.\n');
 toc
 
 
 %% Recognition Plot: Attr_Face DataSet
-%Drawing Plot
+% Drawing Plot
+% showing result for all values of k
 figure('name','Recognition Plot: Test Set');
 x=recognitionRate{1};
 y=recognitionRate{2};
@@ -391,6 +449,12 @@ plot(x,y);
 xlim([0,128]);xlabel('K');ylim([0,1]);ylabel('Rate');
 title('\fontsize{12}{\color{magenta}False Positive Plot: Test Set}');
 
-%%
+%% Showing threshold values
+% We are showing 32 threshold values for k = 100
+k=100;
+for i = 1:32
+    fprintf('Label:%d\tthreshold:%f\n',i,thershold(k,i));
+end
+
 ##### SOURCE END #####
 --></body></html>

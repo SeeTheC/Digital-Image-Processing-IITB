@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-07"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>Assignment 4--2</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-12"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,28 +66,26 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Eigen Faces</a></li><li><a href="#2">Initializing: Yale Datase</a></li><li><a href="#3">Finding the EignFace : Yale Dateset</a></li><li><a href="#4">Reconstruction of Image</a></li><li><a href="#5">First 25 Largest Eigen Faces</a></li></ul></div><h2>Eigen Faces<a name="1"></a></h2><pre class="codeinput">tic;
-</pre><h2>Initializing: Yale Datase<a name="2"></a></h2><pre class="codeinput">yaleDirpath=<span class="string">'../../data/CroppedYale'</span>;
+  </style></head><body><div class="content"><h1>Assignment 4--2</h1><!--introduction--><p>CS-663 Group-163059009, 16305R011</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initializing: Yale Datase</a></li><li><a href="#2">Finding the EignFace : Yale Dateset</a></li><li><a href="#3">Reconstruction of Image</a></li><li><a href="#4">First 25 Largest Eigen Faces</a></li></ul></div><h2>Initializing: Yale Datase<a name="1"></a></h2><p>Reading the yale database Read data will return train and  test cell. Each cell contains data and its associated label.</p><pre class="codeinput">yaleDirpath=<span class="string">'../../data/CroppedYale'</span>;
 [yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,<span class="string">'yale'</span>);
 fprintf(<span class="string">'Reading of images Done.\n'</span>);
 row=192;col=168;
 </pre><pre class="codeoutput">Reading of images Done.
-</pre><h2>Finding the EignFace : Yale Dateset<a name="3"></a></h2><pre class="codeinput">tic
+</pre><h2>Finding the EignFace : Yale Dateset<a name="2"></a></h2><p>Size of train data set size is 40*38 images and test data size is 20*38 images. Here we are finding eigen faces of Yale Dataset. EigenFace is calculated using SVD. It returns following :</p><div><ul><li>mean vector</li><li>normalized eigen faces</li><li>deviated train set from its mean (Xi-X_mean)</li></ul></div><pre class="codeinput">tic
 trainImgCell=yaleTrainImgCell;
 [xMean,efaceNormalized,devTrainImg]=eigenFaceUsingSVD(trainImgCell{1});
 fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
 toc
 </pre><pre class="codeoutput">Finding Eigen Faces.Done.
-Elapsed time is 10.799880 seconds.
-</pre><h2>Reconstruction of Image<a name="4"></a></h2><p>Reconstructing 3nd Yale Person i.e (yaleB03), first pos,</p><pre class="codeinput">tic
+Elapsed time is 22.459889 seconds.
+</pre><h2>Reconstruction of Image<a name="3"></a></h2><p>Reconstructing 3rd Yale Person i.e (yaleB03), first pos,</p><pre class="codeinput">tic
 person=3;
 devTrainVector=devTrainImg(:,person);
 k=[2, 10,20, 50, 75, 100, 125, 150, 175];
 <span class="keyword">for</span> i=1:numel(k)
     Vk=efaceNormalized(:,1:k(i));
     eigenCoffs=Vk'*devTrainVector;
-    <span class="comment">% Re_Img=average face + (a1*eigenface 1) + (a2 * eigenface 2) + (a3 *</span>
-    <span class="comment">% eigenface 3) ....</span>
+    <span class="comment">% Re_Img=average face + (a1*eigenface 1) + (a2 * eigenface 2) + (a3 * eigenface 3) ....</span>
     reconstructedImg=xMean+(Vk*eigenCoffs);
     figure(<span class="string">'name'</span>,strcat(<span class="string">'Reconstructed Image with K:'</span>,int2str(k(i))));
     eigFaceImage = reshape(reconstructedImg,row,col);
@@ -98,8 +96,8 @@ k=[2, 10,20, 50, 75, 100, 125, 150, 175];
 <span class="keyword">end</span>
 toc
 pause(3);
-</pre><pre class="codeoutput">Elapsed time is 1.180043 seconds.
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <h2>First 25 Largest Eigen Faces<a name="5"></a></h2><pre class="codeinput">tic
+</pre><pre class="codeoutput">Elapsed time is 1.625952 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <h2>First 25 Largest Eigen Faces<a name="4"></a></h2><pre class="codeinput">tic
 <span class="keyword">for</span> i=1:25
     figure(<span class="string">'name'</span>,strcat(<span class="string">'Eigen Face:'</span>,int2str(i)));
     testEigFace=efaceNormalized(:,i);
@@ -110,25 +108,40 @@ pause(3);
     colorbar;
 <span class="keyword">end</span>
 toc;
-</pre><pre class="codeoutput">Elapsed time is 3.001467 seconds.
+</pre><pre class="codeoutput">Elapsed time is 3.443036 seconds.
 </pre><img vspace="5" hspace="5" src="myMainScript_10.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_11.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_12.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_13.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_14.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_15.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_16.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_17.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_18.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_19.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_20.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_21.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_22.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_23.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_24.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_25.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_26.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_27.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_28.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_29.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_30.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_31.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_32.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_33.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_34.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Eigen Faces
-
-tic;
+%% Assignment 4REPLACE_WITH_DASH_DASH2
+% CS-663
+% Group-16305R011,163059009
 %% Initializing: Yale Datase
+% Reading the yale database
+% Read data will return train and  test cell. Each cell contains data and
+% its associated label.
+
 yaleDirpath='../../data/CroppedYale';
 [yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,'yale');
 fprintf('Reading of images Done.\n');
 row=192;col=168;
+
 %% Finding the EignFace : Yale Dateset
+% Size of train data set size is 40*38 images and test data size is
+% 20*38 images.
+% Here we are finding eigen faces of Yale Dataset. EigenFace is calculated using SVD. It returns following : 
+% 
+% * mean vector
+% * normalized eigen faces
+% * deviated train set from its mean (Xi-X_mean)
+% 
+
 tic
 trainImgCell=yaleTrainImgCell;
 [xMean,efaceNormalized,devTrainImg]=eigenFaceUsingSVD(trainImgCell{1});
 fprintf('Finding Eigen Faces.Done.\n');
 toc
+
 %% Reconstruction of Image
-% Reconstructing 3nd Yale Person i.e (yaleB03), first pos, 
+% Reconstructing 3rd Yale Person i.e (yaleB03), first pos, 
 tic
 person=3; 
 devTrainVector=devTrainImg(:,person);
@@ -136,8 +149,7 @@ k=[2, 10,20, 50, 75, 100, 125, 150, 175];
 for i=1:numel(k)
     Vk=efaceNormalized(:,1:k(i));   
     eigenCoffs=Vk'*devTrainVector; 
-    % Re_Img=average face + (a1*eigenface 1) + (a2 * eigenface 2) + (a3 *
-    % eigenface 3) ....
+    % Re_Img=average face + (a1*eigenface 1) + (a2 * eigenface 2) + (a3 * eigenface 3) ....
     reconstructedImg=xMean+(Vk*eigenCoffs);
     figure('name',strcat('Reconstructed Image with K:',int2str(k(i))));    
     eigFaceImage = reshape(reconstructedImg,row,col);    
@@ -148,6 +160,7 @@ for i=1:numel(k)
 end
 toc
 pause(3);
+
 %% First 25 Largest Eigen Faces
 tic
 for i=1:25

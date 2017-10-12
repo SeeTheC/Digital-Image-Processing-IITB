@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-08"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>Assignment 4</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-12"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,22 +66,21 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Eace recognition using Eigen Faces</a></li><li><a href="#2">Initialization Att Face Datase</a></li><li><a href="#3">1. Attr_Face DataSet</a></li><li><a href="#4">Finding the EignFace : Attr_Face DataSet</a></li><li><a href="#5">Testing The Probe Image : Attr_Face DataSet</a></li><li><a href="#6">Recognition Plot: Attr_Face DataSet</a></li><li><a href="#7">2. Yale DataSet</a></li><li><a href="#8">Finding the EignFace : Yale Dateset</a></li><li><a href="#9">Testing The Probe Image : Yale Dateset</a></li><li><a href="#10">Recognition Plot: Yale Dateset</a></li><li><a href="#11">3. Yale DataSet - Handling Illumination Change</a></li><li><a href="#12">Testing The Probe Image : Yale Dateset</a></li><li><a href="#13">Recognition Plot: Yale Dateset</a></li></ul></div><h2>Eace recognition using Eigen Faces<a name="1"></a></h2><pre class="codeinput">tic;
-</pre><h2>Initialization Att Face Datase<a name="2"></a></h2><pre class="codeinput">attDirpath=<span class="string">'../../data/att_faces'</span>;
+  </style></head><body><div class="content"><h1>Assignment 4</h1><!--introduction--><p>CS-663 Group-163059009,16305R011</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Face recognition using Eigen Faces</a></li><li><a href="#2">Initialization Att Face Datase</a></li><li><a href="#3">1. Attr_Face DataSet</a></li><li><a href="#4">Finding the EignFace : Attr_Face DataSet</a></li><li><a href="#5">Testing The Probe Image : Attr_Face DataSet</a></li><li><a href="#6">Recognition Plot: Attr_Face DataSet</a></li><li><a href="#7">2. Yale DataSet</a></li><li><a href="#8">Finding the EignFace : Yale Dateset</a></li><li><a href="#9">Testing The Probe Image : Yale Dateset</a></li><li><a href="#10">Recognition Plot: Yale Dateset</a></li><li><a href="#11">3. Yale DataSet - Handling Illumination Change</a></li><li><a href="#12">Testing The Probe Image : Yale Dateset</a></li><li><a href="#13">Recognition Plot: Yale Dateset</a></li></ul></div><h2>Face recognition using Eigen Faces<a name="1"></a></h2><p>We have used PCA algorithm to find eigen faces and for optimization we have use L matrix where L = A'A</p><h2>Initialization Att Face Datase<a name="2"></a></h2><p>Reading the att_faces and yale database Read data will return train and  test cell. Each cell contains data and its associated label.</p><pre class="codeinput">attDirpath=<span class="string">'../../data/att_faces'</span>;
 yaleDirpath=<span class="string">'../../data/CroppedYale'</span>;
 [attrTrainImgCell,attrTestImgCell]=readData(attDirpath,<span class="string">'att_faces'</span>);
 [yaleTrainImgCell,yaleTestImgCell]=readData(yaleDirpath,<span class="string">'yale'</span>);
 fprintf(<span class="string">'Reading of images Done.\n'</span>);
 </pre><pre class="codeoutput">Reading of images Done.
-</pre><h2>1. Attr_Face DataSet<a name="3"></a></h2><h2>Finding the EignFace : Attr_Face DataSet<a name="4"></a></h2><pre class="codeinput">tic
+</pre><h2>1. Attr_Face DataSet<a name="3"></a></h2><h2>Finding the EignFace : Attr_Face DataSet<a name="4"></a></h2><p>Size of train data set size is 6*32(192) images and test data size is 4*32(128) images. Here we are finding eigen faces of att_faces. It returns following :</p><div><ul><li>mean vector</li><li>normalized eigen faces</li><li>deviated train set from its mean (Xi-X_mean)</li></ul></div><pre class="codeinput">tic
 trainImgCell=attrTrainImgCell;
 testImgCell=attrTestImgCell;
 [xMean,efaceNormalized,devTrainSet]=eigenFace(trainImgCell{1});
 fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
 toc
 </pre><pre class="codeoutput">Finding Eigen Faces.Done.
-Elapsed time is 0.178534 seconds.
-</pre><h2>Testing The Probe Image : Attr_Face DataSet<a name="5"></a></h2><pre class="codeinput">tic
+Elapsed time is 0.094006 seconds.
+</pre><h2>Testing The Probe Image : Attr_Face DataSet<a name="5"></a></h2><p>Image Recognition function takes following parameters</p><div><ul><li>normalized eigen face,</li><li>mean vector of images</li><li>deviated train set from its mean and associated train set label</li><li>test images</li><li>set of k largest eigen values</li></ul></div><p>Image recognition returns regonition rate i.e. how well test set is recognized w.r.t k</p><pre class="codeinput">tic
 ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 150, 170];
 recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
 fprintf(<span class="string">'Recognising Test data.Done.\n'</span>);
@@ -100,9 +99,8 @@ K=100	Recognition-Rate:0.937500
 K=150	Recognition-Rate:0.937500 
 K=170	Recognition-Rate:0.929688 
 Recognising Test data.Done.
-Elapsed time is 0.410173 seconds.
-</pre><h2>Recognition Plot: Attr_Face DataSet<a name="6"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
-figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Attr Face DataSet'</span>);
+Elapsed time is 0.286818 seconds.
+</pre><h2>Recognition Plot: Attr_Face DataSet<a name="6"></a></h2><p>Drawing Plot Plot shows the recognition rate w.r.t k</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Attr Face DataSet'</span>);
 x=recognitionRate{1};
 y=recognitionRate{2};
 plot(x,y,<span class="string">'--gs'</span>,<span class="keyword">...</span>
@@ -111,15 +109,15 @@ plot(x,y,<span class="string">'--gs'</span>,<span class="keyword">...</span>
     <span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>,<span class="keyword">...</span>
     <span class="string">'MarkerFaceColor'</span>,[0.5,0.5,0.5]);
 title(<span class="string">'\fontsize{12}{\color{magenta}Recognition Plot: Attr Face DataSet}'</span>);
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>2. Yale DataSet<a name="7"></a></h2><h2>Finding the EignFace : Yale Dateset<a name="8"></a></h2><pre class="codeinput">tic
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>2. Yale DataSet<a name="7"></a></h2><h2>Finding the EignFace : Yale Dateset<a name="8"></a></h2><p>Size of train data set size is 40*38 images and test data size is 20*38 images. Here we are finding eigen faces of Yale Dataset. EigenFace is calculated using SVD. It returns following :</p><div><ul><li>mean vector</li><li>normalized eigen faces</li><li>deviated train set from its mean (Xi-X_mean)</li></ul></div><pre class="codeinput">tic
 trainImgCell=yaleTrainImgCell;
 testImgCell=yaleTestImgCell;
 [xMean,efaceNormalized,devTrainSet]=eigenFaceUsingSVD(trainImgCell{1});
 fprintf(<span class="string">'Finding Eigen Faces.Done.\n'</span>);
 toc
 </pre><pre class="codeoutput">Finding Eigen Faces.Done.
-Elapsed time is 22.628902 seconds.
-</pre><h2>Testing The Probe Image : Yale Dateset<a name="9"></a></h2><pre class="codeinput">tic
+Elapsed time is 26.567087 seconds.
+</pre><h2>Testing The Probe Image : Yale Dateset<a name="9"></a></h2><p>Image Recognition function takes following parameters</p><div><ul><li>normalized eigen face,</li><li>mean vector of images</li><li>deviated train set from its mean and associated train set label</li><li>test images</li><li>set of k largest eigen values</li></ul></div><p>Image recognition returns regonition rate i.e. how well test set is recognized w.r.t k</p><pre class="codeinput">tic
 ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 60, 65, 75, 100, 200, 300, 500, 1000];
 recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
 fprintf(<span class="string">'Recognising Test data.Done.\n'</span>);
@@ -142,9 +140,8 @@ K=300	Recognition-Rate:0.390052
 K=500	Recognition-Rate:0.393979 
 K=1000	Recognition-Rate:0.395288 
 Recognising Test data.Done.
-Elapsed time is 25.249451 seconds.
-</pre><h2>Recognition Plot: Yale Dateset<a name="10"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
-figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Attr Face DataSet'</span>);
+Elapsed time is 31.027251 seconds.
+</pre><h2>Recognition Plot: Yale Dateset<a name="10"></a></h2><p>Drawing Plot</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Attr Face DataSet'</span>);
 x=recognitionRate{1};
 y=recognitionRate{2};
 plot(x,y,<span class="string">'--gs'</span>,<span class="keyword">...</span>
@@ -177,9 +174,8 @@ K=300	Recognition-Rate:0.672775
 K=500	Recognition-Rate:0.680628 
 K=1000	Recognition-Rate:0.683246 
 Recognising Test data.Done.
-Elapsed time is 29.465733 seconds.
-</pre><h2>Recognition Plot: Yale Dateset<a name="13"></a></h2><pre class="codeinput"><span class="comment">%Drawing Plot</span>
-figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Yale DataSet- Illumination Change'</span>);
+Elapsed time is 27.760812 seconds.
+</pre><h2>Recognition Plot: Yale Dateset<a name="13"></a></h2><p>Drawing Plot when first 3 eigen values are removed and then taking the K values from that.</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Recognition Plot: Yale DataSet- Illumination Change'</span>);
 x=recognitionRate{1};
 y=recognitionRate{2};
 plot(x,y,<span class="string">'--gs'</span>,<span class="keyword">...</span>
@@ -190,10 +186,17 @@ plot(x,y,<span class="string">'--gs'</span>,<span class="keyword">...</span>
 title(<span class="string">'\fontsize{12}{\color{magenta}Recognition Plot: Yale DataSet By removing TOP 3 Eign faces}'</span>);
 </pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Eace recognition using Eigen Faces
+%% Assignment 4
+% CS-663
+% Group-16305R011,163059009
 
-tic;
+%% Face recognition using Eigen Faces
+% We have used PCA algorithm to find eigen faces and for optimization we
+% have use L matrix where L = A'A
 %% Initialization Att Face Datase
+% Reading the att_faces and yale database
+% Read data will return train and  test cell. Each cell contains data and
+% its associated label.
 attDirpath='../../data/att_faces';
 yaleDirpath='../../data/CroppedYale';
 [attrTrainImgCell,attrTestImgCell]=readData(attDirpath,'att_faces');
@@ -203,6 +206,15 @@ fprintf('Reading of images Done.\n');
 %% 1. Attr_Face DataSet
 
 %% Finding the EignFace : Attr_Face DataSet
+% Size of train data set size is 6*32(192) images and test data size is
+% 4*32(128) images.
+% Here we are finding eigen faces of att_faces. It returns following : 
+% 
+% * mean vector
+% * normalized eigen faces
+% * deviated train set from its mean (Xi-X_mean)
+% 
+
 tic
 trainImgCell=attrTrainImgCell;
 testImgCell=attrTestImgCell;
@@ -211,6 +223,16 @@ fprintf('Finding Eigen Faces.Done.\n');
 toc
 
 %% Testing The Probe Image : Attr_Face DataSet
+% Image Recognition function takes following parameters 
+% 
+% * normalized eigen face,
+% * mean vector of images
+% * deviated train set from its mean and associated train set label
+% * test images
+% * set of k largest eigen values
+%
+% Image recognition returns regonition rate i.e. how well test set is recognized w.r.t k
+
 tic
 ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 75, 100, 150, 170];   
 recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
@@ -218,7 +240,9 @@ fprintf('Recognising Test data.Done.\n');
 toc
 
 %% Recognition Plot: Attr_Face DataSet
-%Drawing Plot
+% Drawing Plot
+% Plot shows the recognition rate w.r.t k
+
 figure('name','Recognition Plot: Attr Face DataSet');
 x=recognitionRate{1};
 y=recognitionRate{2};
@@ -232,6 +256,15 @@ title('\fontsize{12}{\color{magenta}Recognition Plot: Attr Face DataSet}');
 
 %% 2. Yale DataSet
 %% Finding the EignFace : Yale Dateset
+% Size of train data set size is 40*38 images and test data size is
+% 20*38 images.
+% Here we are finding eigen faces of Yale Dataset. EigenFace is calculated using SVD. It returns following : 
+% 
+% * mean vector
+% * normalized eigen faces
+% * deviated train set from its mean (Xi-X_mean)
+% 
+
 tic
 trainImgCell=yaleTrainImgCell;
 testImgCell=yaleTestImgCell;
@@ -240,6 +273,17 @@ fprintf('Finding Eigen Faces.Done.\n');
 toc
 
 %% Testing The Probe Image : Yale Dateset
+% Image Recognition function takes following parameters 
+% 
+% * normalized eigen face,
+% * mean vector of images
+% * deviated train set from its mean and associated train set label
+% * test images
+% * set of k largest eigen values
+%
+% Image recognition returns regonition rate i.e. how well test set is recognized w.r.t k
+
+
 tic
 ks=[1, 2, 3, 5, 10, 15, 20, 30, 50, 60, 65, 75, 100, 200, 300, 500, 1000];
 recognitionRate=imageRecognition(efaceNormalized,xMean,{devTrainSet,trainImgCell{2}},testImgCell,ks);
@@ -247,7 +291,7 @@ fprintf('Recognising Test data.Done.\n');
 toc
 
 %% Recognition Plot: Yale Dateset
-%Drawing Plot
+% Drawing Plot
 figure('name','Recognition Plot: Attr Face DataSet');
 x=recognitionRate{1};
 y=recognitionRate{2};
@@ -270,7 +314,8 @@ fprintf('Recognising Test data.Done.\n');
 toc
 
 %% Recognition Plot: Yale Dateset
-%Drawing Plot
+% Drawing Plot when first 3 eigen values are removed and then taking the K values from that.
+
 figure('name','Recognition Plot: Yale DataSet- Illumination Change');
 x=recognitionRate{1};
 y=recognitionRate{2};
