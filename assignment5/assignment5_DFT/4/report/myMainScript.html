@@ -1,0 +1,335 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Low Pass Filter</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-17"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Low Pass Filter</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialization</a></li><li><a href="#2">Zero padding</a></li><li><a href="#3">Fourier Transform</a></li><li><a href="#4">1) Ideal Lowpass filter</a></li><li><a href="#5">1.1) Appling Ideal lowpass filter</a></li><li><a href="#6">1.2) Image after Applying Ideal lowpass</a></li><li><a href="#7">2) Gaussian Low Pass Filter</a></li><li><a href="#8">2.1) Appling Guassian lowpass filter</a></li><li><a href="#9">2.2) Image after Applying Gaussian lowpass</a></li></ul></div><h2>Initialization<a name="1"></a></h2><pre class="codeinput">file=<span class="string">'../data/barbara256.png'</span>;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image'</span>);
+img=imread(file);
+imshow(img,[min(img(:)),max(img(:))]),colormap(gray),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Barbara}'</span>);
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>Zero padding<a name="2"></a></h2><pre class="codeinput">[row,col]=size(img);
+imgPad=padarray(img,[ceil(row/2),ceil(col/2)],min(img(:)),<span class="string">'both'</span>);
+figure(<span class="string">'name'</span>,<span class="string">'Padded Image'</span>);
+imshow(imgPad,[min(img(:)),max(img(:))]),colormap (gray);
+title(<span class="string">'\fontsize{10}{\color{red}Barbara: Padded image}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Fourier Transform<a name="3"></a></h2><pre class="codeinput">fimg = fftshift(fft2(imgPad));
+absfimg = log(abs(fimg)+1);
+figure(<span class="string">'name'</span>,<span class="string">'Fourier Transform'</span>);
+imshow(absfimg,[min(absfimg(:)) max(absfimg(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{10}{\color{red}Barbara: Fourier Transform}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>1) Ideal Lowpass filter<a name="4"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Ideal Lowpass Filter'</span>);
+
+<span class="comment">% Lowpass Filter with cutoff frequency 40</span>
+lowPass40=idealLowpass(size(fimg),40);
+subplot(1,2,1);
+imshow(lowPass40,[min(lowPass40(:)) max(lowPass40(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{12}{\color{red}Ideal Lowpass Filter: Cutoff freq 40}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+<span class="comment">% Lowpass Filter with cutoff frequency 80</span>
+lowPass80=idealLowpass(size(fimg),80);
+subplot(1,2,2);
+imshow(lowPass80,[min(lowPass80(:)) max(lowPass80(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{12}{\color{red}Ideal Lowpass Filter: Cutoff freq 80}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>1.1) Appling Ideal lowpass filter<a name="5"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Applied Filter'</span>);
+
+<span class="comment">% Appling lowpass filter with cutoff frequency 40</span>
+G40=fimg.*lowPass40;
+absG=log(abs(G40)+1);
+subplot(121);
+imshow(absG,[min(absG(:)) max(absG(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{12}{\color{magenta} FT after lowpass filter: Cutoff freq 40}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+<span class="comment">% Appling lowpass filter with cutoff frequency 80</span>
+G80=fimg.*lowPass80;
+absG=log(abs(G80)+1);
+subplot(122);
+imshow(absG,[min(absG(:)) max(absG(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{12}{\color{magenta} FT after lowpass filter: Cutoff freq 80}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <h2>1.2) Image after Applying Ideal lowpass<a name="6"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Ideal Lowpass filtered Image'</span>);
+
+<span class="comment">% Filtered FT with cutoff frequency 40</span>
+ifimg=ifft2(ifftshift(G40));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(121);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title(<span class="string">'\fontsize{12}{\color{Magenta}Image after Ideal Lowpass filtered: cutoff 40}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+
+<span class="comment">% Filtered FT with cutoff frequency 80</span>
+ifimg=ifft2(ifftshift(G80));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(122);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title(<span class="string">'\fontsize{12}{\color{Magenta}Image after Ideal Lowpass filtered: cutoff 80}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <h2>2) Gaussian Low Pass Filter<a name="7"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Gaussian Lowpass Filter'</span>);
+
+<span class="comment">% Lowpass Filter with cutoff frequency 40</span>
+gLowPass40=gaussianLowPass(size(fimg),40);
+subplot(1,2,1);
+disImg=gLowPass40;
+imshow(disImg,[min(disImg(:)) max(disImg(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{12}{\color{red} Gaussian Lowpass Filter: Cutoff freq 40}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+<span class="comment">% Lowpass Filter with cutoff frequency 80</span>
+gLowPass80=gaussianLowPass(size(fimg),80);
+subplot(1,2,2);
+disImg=gLowPass80;
+imshow(disImg,[min(disImg(:)) max(disImg(:))]),colormap (gray); colorbar;
+title(<span class="string">'\fontsize{12}{\color{red}Gaussian Lowpass Filter: Cutoff freq 80}'</span>),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <h2>2.1) Appling Guassian lowpass filter<a name="8"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Applied Guassian Filter'</span>);
+
+<span class="comment">% Filtered FT with cutoff frequency 40</span>
+Ggauss40=fimg.*gLowPass40;
+subplot(1,2,1);
+disImg=log(abs(Ggauss40)+1);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title(<span class="string">'\fontsize{12}{\color{magenta} FT after guassian lowpass filter: Cutoff freq 40}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+
+<span class="comment">% Filtered FT with cutoff frequency 80</span>
+Ggauss80=fimg.*gLowPass80;
+subplot(1,2,2);
+disImg=log(abs(Ggauss80)+1);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title(<span class="string">'\fontsize{12}{\color{magenta} FT after guassian lowpass filter: Cutoff freq 80}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <h2>2.2) Image after Applying Gaussian lowpass<a name="9"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Gaussian Lowpass filtered Image'</span>);
+
+<span class="comment">% Filtered FT with cutoff frequency 40</span>
+ifimg=ifft2(ifftshift(Ggauss40));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(121);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title(<span class="string">'\fontsize{12}{\color{Magenta}Image after Gaussian Lowpass filtered: cutoff 40}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+
+<span class="comment">% Filtered FT with cutoff frequency 80</span>
+ifimg=ifft2(ifftshift(Ggauss80));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(122);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title(<span class="string">'\fontsize{12}{\color{Magenta}Image after Gaussian Lowpass filtered: cutoff 80}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Low Pass Filter
+
+%% Initialization
+
+file='../data/barbara256.png';
+figure('name','Original Image');
+img=imread(file);
+imshow(img,[min(img(:)),max(img(:))]),colormap(gray),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Barbara}');
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+axis tight,axis on;
+
+%% Zero padding
+[row,col]=size(img);
+imgPad=padarray(img,[ceil(row/2),ceil(col/2)],min(img(:)),'both');
+figure('name','Padded Image');
+imshow(imgPad,[min(img(:)),max(img(:))]),colormap (gray);
+title('\fontsize{10}{\color{red}Barbara: Padded image}');
+axis tight,axis on;
+
+
+%% Fourier Transform
+fimg = fftshift(fft2(imgPad));
+absfimg = log(abs(fimg)+1);
+figure('name','Fourier Transform');
+imshow(absfimg,[min(absfimg(:)) max(absfimg(:))]),colormap (gray); colorbar;
+title('\fontsize{10}{\color{red}Barbara: Fourier Transform}'),axis tight,axis on;
+
+%% 1) Ideal Lowpass filter
+figure('name','Ideal Lowpass Filter');
+
+% Lowpass Filter with cutoff frequency 40
+lowPass40=idealLowpass(size(fimg),40);
+subplot(1,2,1);
+imshow(lowPass40,[min(lowPass40(:)) max(lowPass40(:))]),colormap (gray); colorbar;
+title('\fontsize{12}{\color{red}Ideal Lowpass Filter: Cutoff freq 40}'),axis tight,axis on;
+
+% Lowpass Filter with cutoff frequency 80
+lowPass80=idealLowpass(size(fimg),80);
+subplot(1,2,2);
+imshow(lowPass80,[min(lowPass80(:)) max(lowPass80(:))]),colormap (gray); colorbar;
+title('\fontsize{12}{\color{red}Ideal Lowpass Filter: Cutoff freq 80}'),axis tight,axis on;
+
+%% 1.1) Appling Ideal lowpass filter
+figure('name','Applied Filter');
+
+% Appling lowpass filter with cutoff frequency 40
+G40=fimg.*lowPass40;
+absG=log(abs(G40)+1);
+subplot(121);
+imshow(absG,[min(absG(:)) max(absG(:))]),colormap (gray); colorbar;
+title('\fontsize{12}{\color{magenta} FT after lowpass filter: Cutoff freq 40}'),axis tight,axis on;
+
+% Appling lowpass filter with cutoff frequency 80
+G80=fimg.*lowPass80;
+absG=log(abs(G80)+1);
+subplot(122);
+imshow(absG,[min(absG(:)) max(absG(:))]),colormap (gray); colorbar;
+title('\fontsize{12}{\color{magenta} FT after lowpass filter: Cutoff freq 80}'),axis tight,axis on;
+
+%% 1.2) Image after Applying Ideal lowpass
+figure('name','Ideal Lowpass filtered Image');
+
+% Filtered FT with cutoff frequency 40
+ifimg=ifft2(ifftshift(G40));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(121);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title('\fontsize{12}{\color{Magenta}Image after Ideal Lowpass filtered: cutoff 40}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+
+% Filtered FT with cutoff frequency 80
+ifimg=ifft2(ifftshift(G80));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(122);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title('\fontsize{12}{\color{Magenta}Image after Ideal Lowpass filtered: cutoff 80}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+%% 2) Gaussian Low Pass Filter
+figure('name','Gaussian Lowpass Filter');
+
+% Lowpass Filter with cutoff frequency 40
+gLowPass40=gaussianLowPass(size(fimg),40);
+subplot(1,2,1);
+disImg=gLowPass40;
+imshow(disImg,[min(disImg(:)) max(disImg(:))]),colormap (gray); colorbar;
+title('\fontsize{12}{\color{red} Gaussian Lowpass Filter: Cutoff freq 40}'),axis tight,axis on;
+
+% Lowpass Filter with cutoff frequency 80
+gLowPass80=gaussianLowPass(size(fimg),80);
+subplot(1,2,2);
+disImg=gLowPass80;
+imshow(disImg,[min(disImg(:)) max(disImg(:))]),colormap (gray); colorbar;
+title('\fontsize{12}{\color{red}Gaussian Lowpass Filter: Cutoff freq 80}'),axis tight,axis on;
+
+
+%% 2.1) Appling Guassian lowpass filter
+figure('name','Applied Guassian Filter');
+
+% Filtered FT with cutoff frequency 40
+Ggauss40=fimg.*gLowPass40;
+subplot(1,2,1);
+disImg=log(abs(Ggauss40)+1);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title('\fontsize{12}{\color{magenta} FT after guassian lowpass filter: Cutoff freq 40}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+
+% Filtered FT with cutoff frequency 80
+Ggauss80=fimg.*gLowPass80;
+subplot(1,2,2);
+disImg=log(abs(Ggauss80)+1);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title('\fontsize{12}{\color{magenta} FT after guassian lowpass filter: Cutoff freq 80}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+%% 2.2) Image after Applying Gaussian lowpass
+figure('name','Gaussian Lowpass filtered Image');
+
+% Filtered FT with cutoff frequency 40
+ifimg=ifft2(ifftshift(Ggauss40));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(121);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title('\fontsize{12}{\color{Magenta}Image after Gaussian Lowpass filtered: cutoff 40}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+
+% Filtered FT with cutoff frequency 80
+ifimg=ifft2(ifftshift(Ggauss80));
+absIfImg=abs(ifimg);
+disImg=absIfImg(129:382,129:382);
+subplot(122);
+imshow(disImg,[min(disImg(:)),max(disImg(:))]),daspect([1,1,1]);
+title('\fontsize{12}{\color{Magenta}Image after Gaussian Lowpass filtered: cutoff 80}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+##### SOURCE END #####
+--></body></html>
