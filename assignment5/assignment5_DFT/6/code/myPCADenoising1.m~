@@ -1,0 +1,59 @@
+function [ outImg ] = myPCADenoising1(img,patchSize,sigma)
+    % PCA based Denoising
+    patchImg=convertImgToPatch(img,patchSize);   
+    noOfPatch=size(patchImg,2);
+    ppt=patchImg*patchImg';
+    [v d]=eig(ppt);
+    eignCoffMat=v'*patchImg;
+    alphaBar=max(0,(sum(eignCoffMat.^2,2)./noOfPatch)-(sigma^2));
+    % kj= 1/1+ (sigma/alphaBar(j))
+    kFactor=1./(1+ (sigma./alphaBar));
+    betaDenoised=bsxfun(@times,alphaBar,kFactor);
+    denoisePatch=v*betaDenoised;
+    outImg=0;
+end
+
+% Returns the  patchImg of dimension (patchSize^2)x (No. of patchs)
+function [patchImg]=convertImgToPatch(img,patchSize)
+    [row,col]=size(img);
+    % Init
+    noOfPatch=(row-patchSize)*(col-patchSize);
+    vectorSize=patchSize^2;
+    patchImg=zeros(vectorSize,noOfPatch);
+    pk=1;
+    % Fetching patch from image and trasforming it into vector 
+    for i=1:row-patchSize;
+        for j=1:col-patchSize;
+            [x1,y1,x2,y2]=getPatchCoordinate([i,j],patchSize);
+            vector=reshape(img(x1:x2,y1:y2),vectorSize,1);
+            patchImg(:,pk)=vector;
+            pk=pk+1;
+        end
+    end        
+end
+
+% Returns the  patchImg of dimension (patchSize^2)x (No. of patchs)
+function [img]=convertPatchToImg(patchImg,patchSize,dim)  
+    row=dim(1);col=dim(2);
+    img=zeros(row,col);    
+    % Init
+    noOfPatch=(row-patchSize)*(col-patchSize);
+    pk=1;
+    % Fetching patch from image and trasforming it into vector 
+    for i=1:row-patchSize;
+        for j=1:col-patchSize;
+            [x1,y1,x2,y2]=getPatchCoordinate([i,j],patchSize);
+            mat=reshape(patchImg(:,pk),row,col);           
+            img(x1:x2,y1:y2)=img(x1:x2,y1:y2)+mat;
+        end
+    end
+    img=img./(patchSize)
+end
+
+% Getting Patch Coordinate
+function [x1,y1,x2,y2]=getPatchCoordinate(topLeftPoint,patchSize)
+    x=topLeftPoint(1);y=topLeftPoint(2);           
+    x1=x;y1=y;    
+    x2=x+patchSize-1;y2=y+patchSize-1; 
+end
+
