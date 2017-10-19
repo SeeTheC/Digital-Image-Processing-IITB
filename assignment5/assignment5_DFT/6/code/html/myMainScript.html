@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Initialization</a></li><li><a href="#3">Adding Gaussian Noise to the image</a></li><li><a href="#4">a) PCA denoising algo</a></li><li><a href="#5">b) PCA denoising algo</a></li></ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">PCA Based Denoising</a></li><li><a href="#2">Initialization</a></li><li><a href="#3">Adding Gaussian Noise to the image</a></li><li><a href="#4">a) PCA denoising algo</a></li><li><a href="#5">b) PCA denoising algo using L similar patch</a></li><li><a href="#6">b) PCA denoising algo</a></li></ul></div><h2>PCA Based Denoising<a name="1"></a></h2><pre class="codeinput">tic;
 </pre><h2>Initialization<a name="2"></a></h2><pre class="codeinput">file=<span class="string">'../data/barbara256.png'</span>;
 figure(<span class="string">'name'</span>,<span class="string">'Original Image'</span>);
 scale=1/2;
@@ -82,14 +82,24 @@ figure(<span class="string">'name'</span>,<span class="string">'noisy Image'</sp
 imshow(noisyImg,colormap(cmGray256)),daspect([1,1,1]);
 title(<span class="string">'\fontsize{10}{\color{red}noisy barbara image}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
-</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>a) PCA denoising algo<a name="4"></a></h2><pre class="codeinput">tic
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>a) PCA denoising algo<a name="4"></a></h2><pre class="codeinput">tic
 patchSize=7;sigma=20;
 img1=myPCADenoising1(noisyImg,patchSize,sigma);
 figure(<span class="string">'name'</span>,<span class="string">'Filtered Image'</span>);
 imshow(img1,colormap(cmGray256)),daspect([1,1,1]);
 title(<span class="string">'\fontsize{10}{\color{red}Filtered Image}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
-</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>b) PCA denoising algo<a name="5"></a></h2><pre class="codeinput"><span class="comment">%{
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <h2>b) PCA denoising algo using L similar patch<a name="5"></a></h2><pre class="codeinput">tic
+patchSize=7;windowSize=31;L=200;sigma=20;
+img2=myPCADenoising3(noisyImg,windowSize,patchSize,L,sigma);
+figure(<span class="string">'name'</span>,<span class="string">'Denoised Image uisng 200 similar Patch'</span>);
+cmGray256=colormap(gray(256));
+imshow(img2,cmGray256),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Filtered Image using 200 similar patch}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+toc;
+</pre><pre class="codeoutput">Elapsed time is 108.465654 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <h2>b) PCA denoising algo<a name="6"></a></h2><pre class="codeinput"><span class="comment">%{
 </span><span class="comment">tic
 </span><span class="comment">patchSize=7;
 </span><span class="comment">windowSize=25;
@@ -108,7 +118,7 @@ colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class
 </span><span class="comment">%}</span>
 </pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% MyMainScript
+%% PCA Based Denoising
 
 tic;
 %% Initialization
@@ -138,6 +148,19 @@ figure('name','Filtered Image');
 imshow(img1,colormap(cmGray256)),daspect([1,1,1]);
 title('\fontsize{10}{\color{red}Filtered Image}'),o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+%% b) PCA denoising algo using L similar patch
+
+tic
+patchSize=7;windowSize=31;L=200;sigma=20;
+img2=myPCADenoising3(noisyImg,windowSize,patchSize,L,sigma);
+figure('name','Denoised Image uisng 200 similar Patch');
+cmGray256=colormap(gray(256));
+imshow(img2,cmGray256),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Filtered Image using 200 similar patch}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+toc;
+
 
 %% b) PCA denoising algo
 %{

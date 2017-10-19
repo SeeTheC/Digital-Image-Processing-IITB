@@ -91,8 +91,7 @@ function [x1,y1,x2,y2]=getWindowCoordinate(windowSize,patchSize,centerCoordinate
     x2=x+N;
     y1=y-N;
     y2=y+N;
-
-   
+ 
 end
 
 

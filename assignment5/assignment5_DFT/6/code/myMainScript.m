@@ -1,4 +1,4 @@
-%% MyMainScript
+%% PCA Based Denoising
 
 tic;
 %% Initialization
@@ -26,8 +26,20 @@ patchSize=7;sigma=20;
 img1=myPCADenoising1(noisyImg,patchSize,sigma);
 figure('name','Filtered Image');
 imshow(img1,colormap(cmGray256)),daspect([1,1,1]);
-title('\fontsize{10}{\color{red}Filtered Image}'),o1 = get(gca, 'Position');
+title('\fontsize{10}{\color{magenta}Filtered Image}'),o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+%% b) PCA denoising algo using L similar patch
+
+tic
+patchSize=7;windowSize=31;L=200;sigma=20;
+img2=myPCADenoising3(noisyImg,windowSize,patchSize,L,sigma);
+figure('name','Denoised Image uisng 200 similar Patch');
+cmGray256=colormap(gray(256));
+imshow(img2,cmGray256),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Filtered Image using 200 similar patch}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+toc;
 
 %% b) PCA denoising algo
 %{
