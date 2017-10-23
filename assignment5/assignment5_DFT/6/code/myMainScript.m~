@@ -28,10 +28,8 @@ imshow(img1,colormap(cmGray256)),daspect([1,1,1]);
 title('\fontsize{10}{\color{magenta}Filtered Image}'),o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1),axis tight,axis on;
 
-meanSqError=sum(sum((img1-img).^2))/(size(img,1)*size(img,2));
-fprintf('Global PCA Mean Sq Error:%f\n',meanSqError);
-
-toc
+meanSqError=sum(sum((img1-img).^2))/size(img,1)*size(img,2);
+fprintf('Mean Error:%f\n',meanSqError);
 %% b) PCA denoising algo using L similar patch
 
 tic
@@ -42,11 +40,7 @@ cmGray256=colormap(gray(256));
 imshow(img2,cmGray256),daspect([1,1,1]);
 title('\fontsize{10}{\color{magenta}Filtered Image using 200 similar patch}'),o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1),axis tight,axis on;
-
-meanSqError=sum(sum((img2-img).^2))/(size(img,1)*size(img,2));
-fprintf('Global PCA Mean Sq Error:%f\n',meanSqError);
 toc;
-
 
 %% b) PCA denoising algo
 %{
