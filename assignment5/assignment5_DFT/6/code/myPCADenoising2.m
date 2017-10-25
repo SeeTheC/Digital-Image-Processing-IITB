@@ -1,4 +1,4 @@
-function [outImg]=myPCADenoising3(img,windowSize,patchSize,L,sigma)
+function [outImg]=myPCADenoising2(img,windowSize,patchSize,L,sigma)
     % padding zeros outside the image. For simple masking
     [row,col]=size(img);
     outImg=zeros(row,col); 

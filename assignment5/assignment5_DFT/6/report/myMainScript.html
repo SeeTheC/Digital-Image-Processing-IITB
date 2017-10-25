@@ -1,0 +1,231 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment 5--6</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-25"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Assignment 5--6</h1><!--introduction--><p>CS-663 Group-163059009, 16305R011</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">PCA Based Denoising</a></li><li><a href="#2">Initialization</a></li><li><a href="#3">Adding Gaussian Noise to the image</a></li><li><a href="#4">a) PCA denoising algo</a></li><li><a href="#5">b) PCA denoising algo using L similar patch</a></li><li><a href="#6">c) Bilateral Filtering</a></li><li><a href="#7">Difference in Results Of PCA denoising and Bilateral</a></li><li><a href="#8">Difference between PCA based approach and bilateral filter</a></li></ul></div><h2>PCA Based Denoising<a name="1"></a></h2><h2>Initialization<a name="2"></a></h2><p>We have taken barbara-part.png image, which has size 128 by 128</p><pre class="codeinput">file=<span class="string">'../data/barbara256-part.png'</span>;
+figure(<span class="string">'name'</span>,<span class="string">'Original Image'</span>);
+img=imread(file);img=double(img);
+cmGray256=gray(256);
+imshow(img,colormap(cmGray256)),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Barbara}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>Adding Gaussian Noise to the image<a name="3"></a></h2><p>Zero mean Gaussian noise of sigma=20 is added</p><pre class="codeinput">rng(0,<span class="string">'twister'</span>);
+noisyImg=img+randn(size(img)).*20;
+figure(<span class="string">'name'</span>,<span class="string">'noisy Image'</span>);
+imshow(noisyImg,colormap(cmGray256)),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{red}Noisy barbara image}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>a) PCA denoising algo<a name="4"></a></h2><p>Implements PCA denoising algorithm by dividing entire image into overlapping patches of size 7 X 7. This is method is called as global PCA denoising. * Its has Mean Sq Error as 96.921905</p><pre class="codeinput">tic
+patchSize=7;sigma=20;
+img1=myPCADenoising1(noisyImg,patchSize,sigma);
+figure(<span class="string">'name'</span>,<span class="string">'Filtered Image'</span>);
+imshow(img1,colormap(cmGray256)),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Global PCA Filtered Image}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+<span class="comment">% Printing Global PCA Mean Sq Error</span>
+meanSqError=sum(sum((img1-img).^2))/(size(img,1)*size(img,2));
+fprintf(<span class="string">'Global PCA Mean Sq Error:%f\n'</span>,meanSqError);
+toc
+pause(2);
+</pre><pre class="codeoutput">Global PCA Mean Sq Error:96.921905
+Elapsed time is 0.645272 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>b) PCA denoising algo using L similar patch<a name="5"></a></h2><p>In this part we collect 200 most similar patches from within a 31 x 31 neighbourhood centered at the top left corner of P(reference patch).</p><div><ul><li>Time taken with file barbara256.png(image of size 256 X 256)) appprox 208.76 sec.</li><li>Time taken with file barbara256-part.png(image of size 128 X 256)) 62.602332 with Mean Sq Error as 62.602332  Paramters:</li></ul></div><div><ol><li>Patch size 7</li><li>Window size 31</li><li>L 200</li><li>sigma=20;</li></ol></div><pre class="codeinput">tic
+patchSize=7;windowSize=31;L=200;sigma=20;
+img2=myPCADenoising2(noisyImg,windowSize,patchSize,L,sigma);
+figure(<span class="string">'name'</span>,<span class="string">'Denoised Image uisng 200 similar Patch'</span>);
+cmGray256=colormap(gray(256));
+imshow(img2,cmGray256),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Filtered Image using 200 similar patch}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+<span class="comment">% Printing mean Square Error</span>
+meanSqError=sum(sum((img2-img).^2))/(size(img,1)*size(img,2));
+fprintf(<span class="string">'Global PCA Mean Sq Error:%f\n'</span>,meanSqError);
+toc;
+pause(2);
+</pre><pre class="codeoutput">Global PCA Mean Sq Error:62.602332
+Elapsed time is 153.407573 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>c) Bilateral Filtering<a name="6"></a></h2><pre>Its has Mean Sq Error as 170.335766</pre><h2>Difference in Results Of PCA denoising and Bilateral<a name="7"></a></h2><p>Result obtained using PCA denoising algo using L similar patch outperforms the result with a bilateral filter. Mean square error obtained for bilateral filter is greater than mean square error obtained in both the previous two parts. With Bilateral filter lot of noise component can still be seen.</p><h2>Difference between PCA based approach and bilateral filter<a name="8"></a></h2><div><ul><li>PCA based approach for denoising is based on "non-local" principle combined with PCA where as bilateral filter is a purely local technique.</li></ul></div><pre class="codeinput">tic
+windowSize=31;
+sigmaSpace=2;
+sigmaIntensity=28;
+[img3,spaceMask]=myBilateralFiltering(noisyImg,windowSize,sigmaSpace,sigmaIntensity);
+figure(<span class="string">'name'</span>,<span class="string">'Denoised Image uisng Bilateral Filtering'</span>);
+cmGray256=colormap(gray(256));
+imshow(img3,cmGray256),daspect([1,1,1]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Filtered Image using Bilateral Filtering}'</span>),o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
+<span class="comment">% Printing mean Square Error</span>
+meanSqError=sum(sum((img3-img).^2))/(size(img,1)*size(img,2));
+fprintf(<span class="string">'\nMean Sq Error of the image:%f\n'</span>,meanSqError);
+toc;
+pause(2);
+</pre><pre class="codeoutput">
+Mean Sq Error of the image:170.335766
+Elapsed time is 1.117455 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Assignment 5REPLACE_WITH_DASH_DASH6
+% CS-663
+% Group-163059009, 16305R011
+
+%% PCA Based Denoising
+
+%% Initialization
+% We have taken barbara-part.png image, which has size 128 by 128
+file='../data/barbara256-part.png';
+figure('name','Original Image');
+img=imread(file);img=double(img);
+cmGray256=gray(256);
+imshow(img,colormap(cmGray256)),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Barbara}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+
+%%  Adding Gaussian Noise to the image
+% Zero mean Gaussian noise of sigma=20 is added 
+rng(0,'twister');
+noisyImg=img+randn(size(img)).*20;
+figure('name','noisy Image');
+imshow(noisyImg,colormap(cmGray256)),daspect([1,1,1]);
+title('\fontsize{10}{\color{red}Noisy barbara image}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+
+%% a) PCA denoising algo
+% Implements PCA denoising algorithm by dividing entire image into
+% overlapping patches of size 7 X 7. This is method is called as global PCA
+% denoising.
+% * Its has Mean Sq Error as 96.921905
+
+tic
+patchSize=7;sigma=20;
+img1=myPCADenoising1(noisyImg,patchSize,sigma);
+figure('name','Filtered Image');
+imshow(img1,colormap(cmGray256)),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Global PCA Filtered Image}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+% Printing Global PCA Mean Sq Error
+meanSqError=sum(sum((img1-img).^2))/(size(img,1)*size(img,2));
+fprintf('Global PCA Mean Sq Error:%f\n',meanSqError);
+toc 
+pause(2);
+%% b) PCA denoising algo using L similar patch
+% In this part we collect 200 most similar patches from within 
+% a 31 x 31 neighbourhood centered at the top left corner of P(reference patch).
+%
+% * Time taken with file barbara256.png(image of size 256 X 256)) appprox 208.76 sec.
+% * Time taken with file barbara256-part.png(image of size 128 X 256)) 62.602332 with Mean Sq Error as 62.602332
+%  Paramters:
+%
+% # Patch size 7
+% # Window size 31 
+% # L 200
+% # sigma=20;
+
+tic
+patchSize=7;windowSize=31;L=200;sigma=20;
+img2=myPCADenoising2(noisyImg,windowSize,patchSize,L,sigma);
+figure('name','Denoised Image uisng 200 similar Patch');
+cmGray256=colormap(gray(256));
+imshow(img2,cmGray256),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Filtered Image using 200 similar patch}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+% Printing mean Square Error
+meanSqError=sum(sum((img2-img).^2))/(size(img,1)*size(img,2));
+fprintf('Global PCA Mean Sq Error:%f\n',meanSqError);
+toc;
+pause(2);
+%% c) Bilateral Filtering
+%  Its has Mean Sq Error as 170.335766
+%% Difference in Results Of PCA denoising and Bilateral
+% Result obtained using PCA denoising algo using L similar patch
+% outperforms the result with a bilateral filter.
+% Mean square error obtained for bilateral filter is greater than mean
+% square error obtained in both the previous two parts.
+% With Bilateral filter lot of noise component can still be seen.
+
+%% Difference between PCA based approach and bilateral filter
+% 
+% * PCA based approach for denoising is based on "non-local" 
+% principle combined with PCA where as bilateral filter is a purely local technique.
+%
+tic
+windowSize=31;
+sigmaSpace=2;
+sigmaIntensity=28;
+[img3,spaceMask]=myBilateralFiltering(noisyImg,windowSize,sigmaSpace,sigmaIntensity);
+figure('name','Denoised Image uisng Bilateral Filtering');
+cmGray256=colormap(gray(256));
+imshow(img3,cmGray256),daspect([1,1,1]);
+title('\fontsize{10}{\color{magenta}Filtered Image using Bilateral Filtering}'),o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
+% Printing mean Square Error
+meanSqError=sum(sum((img3-img).^2))/(size(img,1)*size(img,2));
+fprintf('\nMean Sq Error of the image:%f\n',meanSqError);
+toc;
+pause(2);
+##### SOURCE END #####
+--></body></html>

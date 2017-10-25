@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-17"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>Assignment 5--3</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-25"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,8 +66,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Notch Filter</a></li><li><a href="#2">Inititalization</a></li><li><a href="#3">Zero padding</a></li><li><a href="#4">Finding the Fourier Transform of the Image</a></li><li><a href="#5">Desiging Notch filter</a></li><li><a href="#6">Appliying Notch Filter on Fourier Shift of Image</a></li><li><a href="#7">Inverse Fourier Transform</a></li></ul></div><h2>Notch Filter<a name="1"></a></h2><pre class="codeinput">tic;
-</pre><h2>Inititalization<a name="2"></a></h2><pre class="codeinput">file=<span class="string">'../data/image_low_frequency_noise.mat'</span>;
+  </style></head><body><div class="content"><h1>Assignment 5--3</h1><!--introduction--><p>CS-663 Group-163059009, 16305R011</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Notch Filter</a></li><li><a href="#2">Inititalization</a></li><li><a href="#3">Zero padding</a></li><li><a href="#4">Finding the Fourier Transform of the Image</a></li><li><a href="#5">Desiging Notch filter</a></li><li><a href="#6">Appliying Notch Filter on Fourier Shift of Image</a></li><li><a href="#7">Filtered Image (Inverse Fourier Transform )</a></li></ul></div><h2>Notch Filter<a name="1"></a></h2><h2>Inititalization<a name="2"></a></h2><pre class="codeinput">tic;
+file=<span class="string">'../data/image_low_frequency_noise.mat'</span>;
 l=load (file);
 img1=l.Z;
 figure(<span class="string">'name'</span>,<span class="string">'Original Image'</span>);
@@ -76,10 +76,10 @@ title(<span class="string">'\fontsize{10}{\color{red}Original Image: Barbara}'</
 o1 = get(gca, <span class="string">'Position'</span>);
 colorbar(),set(gca, <span class="string">'Position'</span>, o1);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
-
-<span class="comment">%figure('name','Original Image1');</span>
-<span class="comment">%imagesc(img),daspect([1,1,1]),colormap(cmGray256),colorbar();</span>
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>Zero padding<a name="3"></a></h2><pre class="codeinput">img=img1;
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.281541 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>Zero padding<a name="3"></a></h2><p>If Original image is of size H X W then image is Zero padded symmetrically to create a new image of size 2H X 2W</p><pre class="codeinput">tic
+img=img1;
 [row,col]=size(img);
 imgPad=padarray(img,[ceil(row/2),ceil(col/2)],min(img(:)),<span class="string">'both'</span>);
 figure(<span class="string">'name'</span>,<span class="string">'Padded Image1'</span>);
@@ -87,44 +87,53 @@ imshow(imgPad,[min(img(:)),max(img(:))]),colormap (gray);
 title(<span class="string">'\fontsize{10}{\color{red}Barbara: Padded image}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 impixelinfo;
-</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Finding the Fourier Transform of the Image<a name="4"></a></h2><pre class="codeinput">fShiftImg = fftshift(fft2(imgPad));
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.303731 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>Finding the Fourier Transform of the Image<a name="4"></a></h2><pre class="codeinput">tic
+fShiftImg = fftshift(fft2(imgPad));
 absfimg = log(abs(fShiftImg)+1);
 figure(<span class="string">'name'</span>,<span class="string">'Fourier Transform'</span>);
 imshow(absfimg,[min(absfimg(:)) max(absfimg(:))]),colormap (gray); colorbar;
 title(<span class="string">'\fontsize{10}{\color{magenta}FFT of log(abs(fshiftimg)+1)}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
 impixelinfo;
-</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>Desiging Notch filter<a name="5"></a></h2><pre class="codeinput">radius=10;
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.375981 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>Desiging Notch filter<a name="5"></a></h2><p>A frequency domain Gaussian notch filter is created. It has size of 2H x 2W with the zero frequency at index (H,W) of the 2D filter array. Radius or interms of Gaussian its sigma set to 10 Center points are [237,247] &amp; [278,268]. Found mannually by seeing the FT of the image.</p><pre class="codeinput">tic
+radius=10; <span class="comment">% sigma</span>
 center={[237,247],[278,268]};
 H=notchFilter(size(fShiftImg),center,radius);
 
-figure(<span class="string">'name'</span>,<span class="string">'Filter'</span>);
+figure(<span class="string">'name'</span>,<span class="string">'Notch Filter'</span>);
 imshow(H,[min(H(:)) max(H(:))]); colorbar;
-title(<span class="string">'\fontsize{10}{\color{magenta} Notch Filter)}'</span>);
+title(<span class="string">'\fontsize{10}{\color{magenta} Notch Filter}'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
-impixelinfo;
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.790697 seconds.
 </pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>Appliying Notch Filter on Fourier Shift of Image<a name="6"></a></h2><pre class="codeinput">G=fShiftImg.*H;
 
 absG = log(abs(G)+1);
 figure(<span class="string">'name'</span>,<span class="string">'FshitImg*Notch Filter'</span>);
 imshow(absG,[min(absG(:)) max(absG(:))]); colorbar;
-title(<span class="string">'\fontsize{10}{\color{magenta} Fourier Shift Image * Notch Filter )}'</span>);
+title(<span class="string">'\fontsize{10}{\color{magenta} Fourier Shift Image * Notch Filter }'</span>);
 axis <span class="string">tight</span>,axis <span class="string">on</span>;
-impixelinfo;
-</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <h2>Inverse Fourier Transform<a name="7"></a></h2><pre>IFFT and then taking center portion</pre><pre class="codeinput">ifimg=ifft2(ifftshift(G));
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <h2>Filtered Image (Inverse Fourier Transform )<a name="7"></a></h2><pre>IFFT and then taking center portion</pre><pre class="codeinput">ifimg=ifft2(ifftshift(G));
 img=abs(ifimg(129:383,129:383));
-figure(<span class="string">'name'</span>,<span class="string">'Notch Image'</span>);
+figure(<span class="string">'name'</span>,<span class="string">'Filtered Image'</span>);
 imshow(img,[min(img(:)),max(img(:))]),daspect([1,1,1]);
-title(<span class="string">'\fontsize{10}{\color{magenta}Barbara Filtered Image with Notch Filter applied}'</span>);
-o1 = get(gca, <span class="string">'Position'</span>);
-colorbar(),set(gca, <span class="string">'Position'</span>, o1);
-axis <span class="string">tight</span>,axis <span class="string">on</span>;
+title(<span class="string">'\fontsize{10}{\color{magenta}Barbara Filtered Image with Notch Filter applied}'</span>);o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1),axis <span class="string">tight</span>,axis <span class="string">on</span>;
 </pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
+%% Assignment 5REPLACE_WITH_DASH_DASH3
+% CS-663
+% Group-163059009, 16305R011
+
 %% Notch Filter
 
-tic;
 %% Inititalization
+
+tic;
 file='../data/image_low_frequency_noise.mat';
 l=load (file);
 img1=l.Z;
@@ -134,11 +143,12 @@ title('\fontsize{10}{\color{red}Original Image: Barbara}');
 o1 = get(gca, 'Position');
 colorbar(),set(gca, 'Position', o1);
 axis tight,axis on;
-
-%figure('name','Original Image1');
-%imagesc(img),daspect([1,1,1]),colormap(cmGray256),colorbar();
+toc
 
 %% Zero padding
+% If Original image is of size H X W then image is Zero padded symmetrically to create 
+% a new image of size 2H X 2W
+tic
 img=img1;
 [row,col]=size(img);
 imgPad=padarray(img,[ceil(row/2),ceil(col/2)],min(img(:)),'both');
@@ -147,8 +157,10 @@ imshow(imgPad,[min(img(:)),max(img(:))]),colormap (gray);
 title('\fontsize{10}{\color{red}Barbara: Padded image}');
 axis tight,axis on;
 impixelinfo;
+toc
 
 %% Finding the Fourier Transform of the Image
+tic
 fShiftImg = fftshift(fft2(imgPad));
 absfimg = log(abs(fShiftImg)+1);
 figure('name','Fourier Transform');
@@ -156,18 +168,23 @@ imshow(absfimg,[min(absfimg(:)) max(absfimg(:))]),colormap (gray); colorbar;
 title('\fontsize{10}{\color{magenta}FFT of log(abs(fshiftimg)+1)}');
 axis tight,axis on;
 impixelinfo;
-
+toc
 %% Desiging Notch filter
-radius=10;
+% A frequency domain Gaussian notch filter is created. It has size of 2H x 2W with the zero
+% frequency at index (H,W) of the 2D filter array.
+% Radius or interms of Gaussian its sigma set to 10
+% Center points are [237,247] & [278,268]. Found mannually by seeing the FT
+% of the image.
+tic
+radius=10; % sigma
 center={[237,247],[278,268]};
 H=notchFilter(size(fShiftImg),center,radius);
 
-figure('name','Filter');
+figure('name','Notch Filter');
 imshow(H,[min(H(:)) max(H(:))]); colorbar;
-title('\fontsize{10}{\color{magenta} Notch Filter)}');
+title('\fontsize{10}{\color{magenta} Notch Filter}');
 axis tight,axis on;
-impixelinfo;
-
+toc
 %% Appliying Notch Filter on Fourier Shift of Image
 
 G=fShiftImg.*H;
@@ -175,21 +192,17 @@ G=fShiftImg.*H;
 absG = log(abs(G)+1);
 figure('name','FshitImg*Notch Filter');
 imshow(absG,[min(absG(:)) max(absG(:))]); colorbar;
-title('\fontsize{10}{\color{magenta} Fourier Shift Image * Notch Filter )}');
+title('\fontsize{10}{\color{magenta} Fourier Shift Image * Notch Filter }');
 axis tight,axis on;
-impixelinfo;
 
-%% Inverse Fourier Transform
+%% Filtered Image (Inverse Fourier Transform )
 %  IFFT and then taking center portion
 ifimg=ifft2(ifftshift(G));
 img=abs(ifimg(129:383,129:383));
-figure('name','Notch Image');
+figure('name','Filtered Image');
 imshow(img,[min(img(:)),max(img(:))]),daspect([1,1,1]);
-title('\fontsize{10}{\color{magenta}Barbara Filtered Image with Notch Filter applied}');
-o1 = get(gca, 'Position');
-colorbar(),set(gca, 'Position', o1);
-axis tight,axis on;
-
+title('\fontsize{10}{\color{magenta}Barbara Filtered Image with Notch Filter applied}');o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1),axis tight,axis on;
 
 ##### SOURCE END #####
 --></body></html>

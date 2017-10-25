@@ -57,4 +57,3 @@ function [x1,y1,x2,y2]=getPatchCoordinate(topLeftPoint,patchSize)
     x1=x;y1=y;    
     x2=x+patchSize-1;y2=y+patchSize-1; 
 end
-
